@@ -1,11 +1,7 @@
 <?php
-
+$router->add('GET',     '/api/users',               '\App\Controllers\UsersController::all');
 $router->add('GET', '/', function() {
-    return 'oi';
-});
-
-$router->add('GET', '/legal', function() {
-    return 'legal';
+    return file_get_contents(__DIR__ . '/../../template/index.html');
 });
 
 $router->add('POST',    '/auth/token',      '\App\Controllers\UsersController::getToken');
