@@ -27,12 +27,13 @@ abstract class CrudController
     
     public function update($c, $request)
     {        
-        $id = $request->query->get('id');
-        return $c[$this->getModel()]->update(['id' => $id],$request->request->all());
+        $id = $request->request->get('0');
+        $data = $request->request->get('1');
+        return $c[$this->getModel()]->update(['id' => $id], $data);
     }
     
     public function delete($c, $request)
-    {        
+    {    
         $id = $this->getId($request, 'id');
         return $c[$this->getModel()]->delete($id);
     }

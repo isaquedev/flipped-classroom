@@ -20,12 +20,6 @@ class SchoolClassController extends CrudController
         return $model->all($conditions);
     }
 
-    public function update($c, $request) {
-        $id = $request->request->get('0');
-        $data = $request->request->get('1');
-        return $c[$this->getModel()]->update(['id' => $id], $data);
-    }
-
     public function delete($c, $request)
     {
         //parent::deleteAnotherTable($c, ['id_schoolclasses' => $request->query->get('id')], 'users_schoolclasses');
