@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" max-width="400px">
+        <v-dialog v-if="!isCreatingUser" v-model="dialog" max-width="400px">
             <v-btn slot="activator" flat class="mb-2 black--text" @click="getOthersStudents()">Adicionar Aluno</v-btn>
                 <v-card color="blue-grey lighten-4">
                     <v-card-title class="headline"> Adicionar Aluno</v-card-title>                    
@@ -20,6 +20,7 @@
                 </v-container>
             </v-card>
         </v-dialog>
+        <v-btn v-if="isCreatingUser" :disabled="true" flat class="mb-2 black--text">Adicionar Aluno</v-btn>
     </div>
 </template>
 
@@ -35,6 +36,7 @@ export default {
             valid: false,
             student: null,
             students: [],
+            isCreatingUser: false,
             validation: {
                     student: [
                         v => !!v || 'Estudante é obrigatório'
@@ -50,8 +52,9 @@ export default {
             }
             this.dialog = false;
             this.$refs.form.reset();
+            this.isCreatingUser = true;
             this.$store.dispatch('user/createUserTurma', dataOrganized).then(() => {
-                eventHub.$emit('update_users_classes');
+                this.isCreatingUser = false;
             });
         },
         getOthersStudents() {

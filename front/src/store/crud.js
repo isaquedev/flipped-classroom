@@ -52,6 +52,13 @@ export default function (endpoint) {
             })
 
             return resultClean;
+        }, 
+        filter: state => () => {
+            const filteredQuestionnaires = [];
+            state.all.forEach((questionnaire, q_key) => {
+                filteredQuestionnaires[q_key] = questionnaire['id'] + ' - ' + questionnaire['title'];
+            });
+            return filteredQuestionnaires;
         }
     }
     
@@ -184,8 +191,8 @@ export default function (endpoint) {
     const actions = {
         addQuestion(context, data) {
             data = qs.stringify(data);
-            let url = endpoint + '/get?' + data;
-            return axios.get(url).then((res) => {
+            let url = endpoint + '/return';
+            return axios.post(url, data).then((res) => {
                 context.commit('addQuestion', res.data);
             });
         },
@@ -212,12 +219,8 @@ export default function (endpoint) {
             });
         },
         createQuestion(context, data) {
-            let url = endpoint;
-            if (data[0]) {
-                url += '/' + data[0];
-            }
-            data[1] = qs.stringify(data[1]);
-            return axios.post(url, data[1]).then(() => {
+            data = qs.stringify(data);
+            return axios.post(url, data).then(() => {
             })
         },
         update(context, data)  {
@@ -227,23 +230,14 @@ export default function (endpoint) {
                 let updated = qs.parse(res.data);
                 let moduleName = endpoint.split('/')[2];
                 if (moduleName == 'user') {
-                    context.commit('updateUser', updated);                    
+                    context.commit('updateUser', updated);
                 } else if(moduleName == 'schoolclasses') {
                     context.commit('updateClass', updated);
                 } else if(moduleName == 'questionnaires'){
                     context.commit('updateQuestionnaire', res.data);
+                } else if(moduleName == 'question'){
+                    context.commit('updateAll', updated);
                 }
-            })
-        },
-        updateAll(context, data)  {
-            let url = endpoint;
-            if (data[0]) {
-                url += '/' + data[0];
-            }
-            data[1] = qs.stringify(data[1]);
-            return axios.put(url, data[1]).then((res) => {
-                let updated = qs.parse(res.config.data);
-                context.commit('updateAll', updated);
             })
         },
         delete(context, id) {
@@ -270,7 +264,7 @@ export default function (endpoint) {
             })
         },
         deleteUsersTurmas(context, data) {
-            //let url = endpoint + '/turmas?student=' + data[0] + '&class=' + data[1];
+            let url = endpoint + '/turmas/' + data[0] + '/' + data[1];
             return axios.delete(url).then((res) => {
                 context.commit('deleteUsersTurmas', res.data);
             })

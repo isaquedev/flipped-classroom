@@ -153,7 +153,7 @@ export default {
     methods:{
         delQuestion(id){
             this.dialogDel = true;
-            this.id = question_id;
+            this.id = id;
         },
         edtQuestion(question, id){
             this.dialogEdt = true;

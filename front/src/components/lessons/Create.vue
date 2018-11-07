@@ -21,8 +21,6 @@
                     label="Link do vídeo"
                 ></v-text-field>
 
-                {{questionnaires}}
-
                 <v-autocomplete
                         v-model="questionnaire"
                         :items="questionnaires"
@@ -95,7 +93,7 @@ export default {
     },
     computed: {
         questionnaires() {
-            return this.$store.state.questionnaires.all;
+            return this.$store.getters['questionnaires/filter']();
         }
     },
     data() {
@@ -118,6 +116,7 @@ export default {
       this.data.id_schoolclasses = this.$route.params.id;
       this.data.release_date = this.due_date + " " + this.due_date_time;
       this.$store.dispatch("lessons/create", this.data).then(res => {
+        this.data.text_content = "";
         this.$refs.form.reset();
       });
     },

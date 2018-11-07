@@ -2,7 +2,6 @@
     <v-dialog
         v-model="dialog"
         fullscreen
-        scrollable
     >
         <v-card>
             <v-toolbar card color="amber" class="elevation-2">
@@ -15,7 +14,9 @@
             </v-toolbar>
             <v-container>
                 <div v-html="lesson.text_content"></div>
-                <iframe class="iframe-container" width="560" height="315" :src="videoId" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <youtube :video-id="videoId"
+                    @ended="videoEnd()"></youtube>
+                
             </v-container>
         </v-card>
     </v-dialog>
@@ -23,12 +24,6 @@
 
 <script>
 import { eventHub } from '../../eventHub';
-import { PlyrVideo } from 'vue-plyr'
-import 'vue-plyr/dist/vue-plyr.css'
-
-function onYouTubeIframeAPIReady (){
-    console.log('ready');
-}
 
 export default {
     data() {
@@ -37,6 +32,7 @@ export default {
             id: null,
             videoId: null,
             lesson: [],
+            blockQuestionnaire: true,
         }
     },
     created() {
@@ -49,27 +45,17 @@ export default {
     },
     methods: {
         loadVideo(url){
-            if(url != null)
-                this.videoId = "https://www.youtube-nocookie.com/embed/" + url.split('=')[1];
-            else
-                this.videoId = null;
+            this.videoId = this.$youtube.getIdFromURL(url);
             console.log(this.videoId);
         },
         close(){
             this.dialog = false;
             this.videoId = null;
+        },
+        videoEnd() {
+            blockQuestionnaire = false;
         }
     },
 
 }
 </script>
-
-<style>
- .iframe-container{
-    position: relative;
-    margin: 0;
-    width: 80%;
-	padding-top: 5px;
-	height: 90%;
- }
-</style>

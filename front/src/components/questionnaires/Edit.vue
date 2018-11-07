@@ -104,7 +104,7 @@ export default {
     methods: {
         submit() {
             this.$store.dispatch('questionnaires/update', [this.id, this.data]).then((res) => {
-                this.$store.dispatch('question/updateAll', [this.id, this.$store.state.question.all]).then(() =>{
+                this.$store.dispatch('question/update', [this.id, this.$store.state.question.all]).then(() =>{
                     this.$store.commit('question/clean');
                 });
             })
