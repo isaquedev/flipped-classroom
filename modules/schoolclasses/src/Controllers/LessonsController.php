@@ -12,15 +12,25 @@ class LessonsController extends CrudController
     }
 
     public function listByTurma($c, $request)
-    {        
-        $id_schoolclasses = $request->query->get('id');
-        return $c[$this->getModel()]->all(['id_schoolclasses' => $id_schoolclasses]);
+    {   
+        $id = parent::getId($request, 'id_schoolclasses');
+        return $c[$this->getModel()]->all($id);
     }
 
     public function havePermission($c, $request) {
-        $id_schoolclasses = $request->query->get('id_schoolclasses');
-        $model = $c[$this->getModel()];
-        $user_id = $model->user_id;
-        return $c[$this->getModel()]->havePermission(['id_student' => $user_id, 'id_schoolclasses' => $id_schoolclasses]);
+        $user_type  = $c[$this->getModel()]->type;
+        return $user_type == 1 ? $this->teacherHavePermission($c, $request) : $this->studentHavePermission($c, $request);
+    }
+
+    public function teacherHavePermission($c, $request) {
+        $id = parent::getId($request, 'id');
+        $id['id_teacher'] = $c[$this->getModel()]->user_id;
+        return $c[$this->getModel()]->havePermission($id, true);
+    }
+    
+    public function studentHavePermission($c, $request) {
+        $id = parent::getId($request, 'id_schoolclasses');
+        $id['id_student'] = $c[$this->getModel()]->user_id;
+        return $c[$this->getModel()]->havePermission($id, false);
     }
 }

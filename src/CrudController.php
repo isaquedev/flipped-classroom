@@ -33,12 +33,32 @@ abstract class CrudController
     
     public function delete($c, $request)
     {        
-        $id = $request->query->get('id');
-        return $c[$this->getModel()]->delete(['id' => $id]);
+        $id = $this->getId($request, 'id');
+        return $c[$this->getModel()]->delete($id);
     }
 
     public function deleteAnotherTable($c, $conditions, $table) {        
         return $c[$this->getModel()]->delete($conditions, $table);
+    }
+
+    public function getId($request, $key){
+        $url = explode("/", $request->attributes->all()[0]);
+        $id = $url[sizeOf($url) - 1];
+        if ($id != explode("_", $this->getModel())[0]){
+            return [$key => $id];
+        } else {
+            return [];
+        }
+    }
+
+    public function getIds($request, $key){
+        $url = explode("/", $request->attributes->all()[0]);
+        $id = $url[sizeOf($url) - 1];
+        if ($id != explode("_", $this->getModel())[0]){
+            return [$key => $id];
+        } else {
+            return [];
+        }
     }
 
 }

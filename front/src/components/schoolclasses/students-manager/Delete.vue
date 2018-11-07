@@ -47,9 +47,7 @@ export default {
     methods: {
         submit() {
             this.dialog = false;
-            this.$store.dispatch('user/deleteUsersTurmas', [this.aluno.id, this.$route.params.id]).then(() => {
-                //this.$store.dispatch('schoolclasses/getAll');
-            });
+            this.$store.dispatch('user/deleteUsersTurmas', [this.aluno.id, this.$route.params.id]);
         }
     }
 }

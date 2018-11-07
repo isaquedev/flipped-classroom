@@ -156,6 +156,7 @@ export default function (endpoint) {
             })
         },
         delete(state, data) {
+            console.log(data);
             for (let index = 0; index < state.all.length; index++) {
                 if (state.all[index]['id'] == data['id'])
                 state.all.splice(index, 1);
@@ -191,7 +192,7 @@ export default function (endpoint) {
         getAll(context, id) {
             let url = endpoint;
             if (id) {
-                url += '?id=' + id;
+                url += '/' + id;
             }
             return axios.get(url).then((res) => {
                 context.commit('updateAll', res.data);
@@ -211,32 +212,34 @@ export default function (endpoint) {
             });
         },
         createQuestion(context, data) {
-            let url = endpoint + '?id=' + data[0];
+            let url = endpoint;
+            if (data[0]) {
+                url += '/' + data[0];
+            }
             data[1] = qs.stringify(data[1]);
             return axios.post(url, data[1]).then(() => {
             })
         },
         update(context, data)  {
-            let url = endpoint + '?id='+data[0];
-            data[1] = qs.stringify(data[1]);
-            return axios.put(url, data[1]).then((res) => {
-                let updated = qs.parse(res.config.data);
-                updated['id'] = data[0];
+            let url = endpoint;
+            data = qs.stringify(data);
+            return axios.put(url, data).then((res) => {
+                let updated = qs.parse(res.data);
                 let moduleName = endpoint.split('/')[2];
                 if (moduleName == 'user') {
                     context.commit('updateUser', updated);                    
                 } else if(moduleName == 'schoolclasses') {
                     context.commit('updateClass', updated);
                 } else if(moduleName == 'questionnaires'){
-                    console.log('back-end');
-                    console.log(data);
-                    console.log(res.data);
                     context.commit('updateQuestionnaire', res.data);
                 }
             })
         },
         updateAll(context, data)  {
-            let url = endpoint + '?id=' + data[0];
+            let url = endpoint;
+            if (data[0]) {
+                url += '/' + data[0];
+            }
             data[1] = qs.stringify(data[1]);
             return axios.put(url, data[1]).then((res) => {
                 let updated = qs.parse(res.config.data);
@@ -244,7 +247,11 @@ export default function (endpoint) {
             })
         },
         delete(context, id) {
-            return axios.delete(endpoint + '?id=' + id).then(res => {
+            let url = endpoint;
+            if (id) {
+                url += '/' + id;
+            }
+            return axios.delete(url).then(res => {
                 context.commit('delete', res.data);
             })
         },
@@ -263,7 +270,7 @@ export default function (endpoint) {
             })
         },
         deleteUsersTurmas(context, data) {
-            let url = endpoint + '/turmas?student=' + data[0] + '&class=' + data[1];
+            //let url = endpoint + '/turmas?student=' + data[0] + '&class=' + data[1];
             return axios.delete(url).then((res) => {
                 context.commit('deleteUsersTurmas', res.data);
             })
@@ -281,7 +288,10 @@ export default function (endpoint) {
             })
         },
         getClassViewPermission(context, turma_id) {
-            let url = endpoint + '/permission?turma_id=' + turma_id;
+            let url = endpoint;
+            if (turma_id) {
+                url += '/permission/' + turma_id;
+            }
             return axios.get(url);
         },
     }

@@ -7,9 +7,13 @@ use UNI\Framework\Model;
 class Lessons extends Model
 {
 
-    public function havePermission($conditions) {
-        
-        $users_turmas = parent::all($conditions, 'users_turmas');
-        return sizeof($users_turmas);
+    public function havePermission($conditions, $isTeacher) {
+        if ($isTeacher){
+            $isTeacherOfThisClass = parent::all($conditions, 'schoolclasses');
+            return sizeof($isTeacherOfThisClass);
+        } else {
+            $users_schoolclasses = parent::all($conditions, 'users_schoolclasses');
+            return sizeof($users_schoolclasses);
+        }
     }
 }

@@ -68,10 +68,7 @@
                 } else {
                     this.getViewPermission();
                 }
-            } else {
-                window.location = '/';
             }
-            
         },
         methods: {
             getViewPermission() {

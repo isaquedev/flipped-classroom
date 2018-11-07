@@ -107,7 +107,6 @@ export default {
             content: '',
             due_date: null,
             due_date_time: "12:00",
-            questionnaires: [],
             questionnaire: null,
             validation: {
             title: [v => !!v || "Título é obrigatório"],

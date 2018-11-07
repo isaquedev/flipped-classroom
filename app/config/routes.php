@@ -6,7 +6,8 @@ $router->add('GET', '/', function() {
 $router->add('POST',    '/auth/token',      '\App\Controllers\UsersController::getToken');
 
 //Rota usada para criar usuários sem precisar de Token, feita para criar o administrador o sistema
-$router->add('POST',    '/auth/register',   '\App\Controllers\UsersController::create');
+//TODO create a admin on /auth/token on not have users
+//$router->add('POST',    '/auth/register',   '\App\Controllers\UsersController::create');
 
 $router->add('GET',     '/api/me', function($c) {
     header('Content-Type: application/json');    
@@ -23,8 +24,7 @@ $router->add('DELETE',  '/api/user',                '\App\Controllers\UsersContr
 $router->add('GET',     '/api/users',               '\App\Controllers\UsersController::all');
 
 $router->add('GET',     '/api/teachers',            '\App\Controllers\UsersController::getTeachers');
-$router->add('GET',     '/api/edit_permission',     '\App\Controllers\UsersController::getEditPermission');
 
 $router->add('GET',     '/api/user/turmas',         '\App\Controllers\UsersController::getUsersTurmas');
 $router->add('POST',    '/api/user/turmas',         '\App\Controllers\UsersController::createUsersTurmas');
-$router->add('DELETE',  '/api/user/turmas',         '\App\Controllers\UsersController::deleteUsersTurmas');
+$router->add('DELETE',  '/api/user/turmas/(*)+',         '\App\Controllers\UsersController::deleteUsersTurmas');

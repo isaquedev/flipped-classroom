@@ -12,8 +12,8 @@ class QuestionController extends CrudController
     }
 
     public function index($c, $request) {
-        $id = $request->query->get('id');
-        return $c[$this->getModel()]->all(['id_questionnaire' => $id]);
+        $id = parent::getId($request, 'id_questionnaire');
+        return $c[$this->getModel()]->all($id);
     }
 
     public function create($c, $request) {

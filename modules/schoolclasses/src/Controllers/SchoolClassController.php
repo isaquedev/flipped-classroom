@@ -11,11 +11,6 @@ class SchoolClassController extends CrudController
         return 'schoolclasses_model';
     }
 
-    public function create($c, $request)
-    {
-        return $c[$this->getModel()]->create($request->request->all());
-    }
-
     public function index($c, $request) {
         $conditions = [];
         $model = $c[$this->getModel()];
@@ -25,9 +20,15 @@ class SchoolClassController extends CrudController
         return $model->all($conditions);
     }
 
+    public function update($c, $request) {
+        $id = $request->request->get('0');
+        $data = $request->request->get('1');
+        return $c[$this->getModel()]->update(['id' => $id], $data);
+    }
+
     public function delete($c, $request)
-    {          
-        parent::deleteAnotherTable($c, ['id_schoolclasses' => $request->query->get('id')], 'users_schoolclasses');
+    {
+        //parent::deleteAnotherTable($c, ['id_schoolclasses' => $request->query->get('id')], 'users_schoolclasses');
         return parent::delete($c, $request);
     }
 

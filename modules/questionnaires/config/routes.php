@@ -1,6 +1,6 @@
 <?php
 
-$router->add('GET', '/api/questionnaires/(\d)+',  'UNI\Framework\Questionnaires\Controllers\QuestionnaireController::index');
+$router->add('GET', '/api/questionnaires/?(\d)*',  'UNI\Framework\Questionnaires\Controllers\QuestionnaireController::index');
 $router->add('POST', '/api/questionnaires',  'UNI\Framework\Questionnaires\Controllers\QuestionnaireController::create');
 $router->add('PUT', '/api/questionnaires',  'UNI\Framework\Questionnaires\Controllers\QuestionnaireController::update');
 $router->add('DELETE', '/api/questionnaires',  'UNI\Framework\Questionnaires\Controllers\QuestionnaireController::delete');
