@@ -69,8 +69,6 @@ export default {
             this.$store.dispatch('auth/login', this.data).catch(() => {
                 this.error = true;
                 this.$refs.form.reset();
-            }).then(() => {
-                window.location = '/';
             });
         }
     }
