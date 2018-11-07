@@ -7,7 +7,7 @@ $container['events'] = function(){
 $container['settings'] = function() {
     return [
         'online-db' => [
-            'dsn' => 'pgsql:host=us-cdbr-iron-east-01.cleardb.net',
+            'dsn' => 'mysql:host=us-cdbr-iron-east-01.cleardb.net',
             'database' => 'heroku_1bb70b6ea823f68',
             'username' => 'b8eb34bd2165da',
             'port' => '3306',
