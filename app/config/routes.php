@@ -4,6 +4,10 @@ $router->add('GET', '/', function() {
     return 'oi';
 });
 
+$router->add('GET', '/legal', function() {
+    return 'legal';
+});
+
 $router->add('POST',    '/auth/token',      '\App\Controllers\UsersController::getToken');
 
 //Rota usada para criar usuários sem precisar de Token, feita para criar o administrador o sistema
