@@ -1,7 +1,7 @@
 <?php
 
 $router->add('GET', '/', function() {
-    return file_get_contents(__DIR__ . '/../../template/index.html');
+    return 'oi';
 });
 
 $router->add('POST',    '/auth/token',      '\App\Controllers\UsersController::getToken');
