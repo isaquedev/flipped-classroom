@@ -11,8 +11,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema flipped_classsroom_edu_system
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `flipped_classroom_edu_system` DEFAULT CHARACTER SET utf8 ;
-USE `flipped_classroom_edu_system` ;
+CREATE SCHEMA IF NOT EXISTS `heroku_1bb70b6ea823f68` DEFAULT CHARACTER SET utf8 ;
+USE `heroku_1bb70b6ea823f68` ;
 
 -- -----------------------------------------------------
 -- Table `users`

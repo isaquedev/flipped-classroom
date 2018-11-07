@@ -29,7 +29,7 @@ class Router{
             }
         }
         
-        throw new HttpException('Page not found', 202);
+        throw new HttpException('Page not found', 404);
     }
 
     public function getCurrentUrl()
