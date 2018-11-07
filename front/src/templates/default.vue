@@ -14,6 +14,7 @@
 
 <script>
 import Header from '../partials/Header';
+import { eventHub } from '../eventHub';
 
 export default {
   name: 'App',
@@ -23,21 +24,26 @@ export default {
     }
   },
   mounted() {
-        this.$store.dispatch('user/getUser').then((res) => {
-          if (this.$store.state.user.user['user_type'] == 0) {
-            this.getUsers();
-          } 
-        });        
-        this.$store.dispatch('projects/getAll');
+        this.$store.dispatch('auth/getUser').then((res) => {
+          if (this.$store.state.auth.user['type'] == 0) {
+            this.getAdminData();
+          }
+          if (this.$store.state.auth.user['type'] == 1) {
+            this.$store.dispatch('questionnaires/getAll', this.$store.state.auth.user['id']);
+          }
+        });
+        this.$store.dispatch('schoolclasses/getAll');
         this.$store.dispatch('user/getTeachers');
   },
   components: {
     'u-header' : Header
   },
   methods: {
-    async getUsers() {
+    async getAdminData() {
       await this.$store.dispatch('user/getUsers');
-      await this.$store.dispatch('user/getUsersTurmas');
+      await this.$store.dispatch('user/getUsersTurmas').then(() => {
+        eventHub.$emit('users-turmas-getted');
+      });
     }
   }
 }

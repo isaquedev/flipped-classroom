@@ -8,13 +8,14 @@ import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import './axios';
 import AsyncComputed from 'vue-async-computed'
-
+import VueYoutube from 'vue-youtube'
 import store from './store';
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify);
 Vue.use(AsyncComputed);
+Vue.use(VueYoutube);
 
 /* eslint-disable no-new */
 new Vue({

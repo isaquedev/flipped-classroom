@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Projects from '@/components/Projects'
-import ProjectList from '@/components/turmas/List'
-import ProjectShow from '@/components/turmas/Show'
-import Schedules from '@/components/Schedules'
+import SchoolClasses from '@/components/SchoolClasses'
+import SchoolClassesList from '@/components/schoolclasses/List'
+import SchoolClassesShow from '@/components/schoolclasses/Show'
 import Users from '@/components/Users'
-import StudentsManager from '@/components/StudentsManager'
+import Questionnaires from '@/components/Questionnaires'
 
 Vue.use(Router)
 
@@ -13,33 +12,29 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/projects'
+      redirect: '/schoolclasses'
     },
     {
-      path: '/projects',
-      component: Projects,
+      path: '/schoolclasses',
+      component: SchoolClasses,
       children: [
         {
           path: '',
-          component: ProjectList
+          component: SchoolClassesList
         },
         {
           path: ':id',
-          component: ProjectShow
+          component: SchoolClassesShow
         }
       ]
     }, 
-    {
-      path: '/schedules',
-      component: Schedules
-    },
     {
       path: '/users',
       component: Users
     },
     {
-      path: '/students-manager',
-      component: StudentsManager
+      path: '/questionnaires',
+      component: Questionnaires
     }
   ]
 })

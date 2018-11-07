@@ -14,8 +14,8 @@ class UsersController extends CrudController
         return 'users_model';
     }
 
-    public function getUsers($c) {
-        return $this->removeNotNecessaryData($c[$this->getModel()]->getUsers());
+    public function all($c) {
+        return $this->removeNotNecessaryData($c[$this->getModel()]->allById("<> 0"));
     }
 
     public function create($c, $request)
@@ -29,14 +29,11 @@ class UsersController extends CrudController
         return $this->removeNotNecessaryData($user);
     }
 
-    //Método criado para remover informações desnecessárias para as requisições
-    //aumentando a segurança dos dados dos usuários
-    //minData = true    -> remove login,    password, user_type,    created e modified
-    //minData = false   -> remove           password,               created e modified 
+    //Remove as informações desnecessárias para as requisições envolvendo dados dos usuários
     public function removeNotNecessaryData($var, $minData = false) { 
         unset($var['password'], $var['created'], $var['modified']);
         if ($minData) {
-            unset($var['login'], $var['user_type']);
+            unset($var['login'], $var['type']);
         }
         return $var;
     }
@@ -91,10 +88,11 @@ class UsersController extends CrudController
 
     public function getTeachers($c, $request)
     {
-        $teachers = $c[$this->getModel()]->all(['user_type' => 1]);
+        $teachers = $c[$this->getModel()]->allById("= 1");
+
         for ($i=0; $i < sizeof($teachers); $i++) { 
             $teachers[$i] = $this->removeNotNecessaryData($teachers[$i], true);
-        }        
+        }
         return $teachers;
     }
 
@@ -103,8 +101,35 @@ class UsersController extends CrudController
     }
 
     public function createUsersTurmas($c, $request) {
-        //return $c[$this->getModel()]->create($request->request->all());
-        return $request->request->all();
+        $student =  $c[$this->getModel()]->create($request->request->all(), 'users_schoolclasses', false);
+
+        return $this->getStudent($c, $student['id_student'], $student['id_schoolclasses']);
     }
+
+    public function deleteUsersTurmas($c, $request) {
+        $student_id = $request->query->get('student');
+        $class_id = $request->query->get('class');
+
+        $student =  $c[$this->getModel()]->delete(
+            ['id_student' => $student_id, 'id_schoolclasses' => $class_id],
+            'users_schoolclasses'
+        );
+
+        return $this->getStudent($c, $student_id, $class_id);
+    }
+
+    public function getStudent($c, $student_id, $class_id) {
+        $query = "SELECT name FROM users WHERE id=?";
+        $bind = [$student_id];
+        $request_student = $c[$this->getModel()]->customQuery($query, $bind)[0];
+
+        return $result = [
+            'class_id' => $class_id,
+            'student' => [
+                'id'   => $student_id,
+                'name' => $request_student['name'],
+            ]
+        ];
+    } 
 
 }

@@ -5,11 +5,11 @@
     >
         <v-card>
             <v-card-title class="headline">Remover usuário?</v-card-title>
-            <v-card-text v-if="user.user_type == 'Professor'">
+            <v-card-text v-if="user.type == 'Professor'">
                 Remover um professor exclui todas as turmas e aulas que ele está vinculado
             </v-card-text>
             <v-card-text>
-                Tem certeza que deseja o usuário {{user.name}}?
+                Tem certeza que deseja remover o usuário {{user.name}}?
             </v-card-text>            
             <v-card-actions>
 
@@ -51,7 +51,8 @@ export default {
         submit() {
             this.dialog = false;
             this.$store.dispatch('user/delete', this.user.id).then(() => {
-                this.$store.dispatch('projects/getAll');
+                this.$store.dispatch('schoolclasses/getAll');
+                this.$store.commit('user/deleteStudentsList', this.user.id);
             });
         }
     }

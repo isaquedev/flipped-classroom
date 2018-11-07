@@ -8,7 +8,7 @@ $container['settings'] = function() {
     return [
         'db' => [
             'dsn' => 'mysql:host=localhost',
-            'database' => 'pp_project_manager',
+            'database' => 'flipped_classroom_edu_system',
             'username' => 'root',
             'password' => '',
             'options' => [

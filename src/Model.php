@@ -41,8 +41,13 @@ abstract class Model
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function customQuery($query) {
+    public function customQuery($query, $bind = []) {
         $stmt = $this->db->prepare($query);
+        if (sizeof($bind) > 0) {
+            foreach ($bind as $key => &$val) {
+                $stmt->bindParam($key + 1, $val);
+            }
+        }
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -63,15 +68,17 @@ abstract class Model
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function create(array $data, $table = null)
+    public function create(array $data, $table = null, $haveDate = true)
     {        
         if ($table == null)
         $table = $this->table;
 
         $this->events->trigger('creating.' . $table, null, $data);
 
-        $data['created'] = date('Y-m-d G:i:s');
-        $data['modified'] = date('Y-m-d G:i:s');
+        if ($haveDate) {
+            $data['created'] = date('Y-m-d G:i:s');
+            $data['modified'] = date('Y-m-d G:i:s');
+        }
         
         $data = $this->setData($data);
 
@@ -81,7 +88,9 @@ abstract class Model
         $stmt = $this->db->prepare($query->sql);
         $stmt->execute($query->bind);
 
-        $data = $this->get(['id'=>$this->db->lastInsertId()]);
+        if($haveDate){
+            $data = $this->get(['id'=>$this->db->lastInsertId()]);
+        }
 
         $this->events->trigger('created.' . $table, null, $data);
 

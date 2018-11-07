@@ -17,11 +17,11 @@
                                     required
                                 ></v-text-field>
                                 <v-autocomplete
-                                    v-model="user_type"
+                                    v-model="type"
                                     :items="users_types"
                                     label="Tipo de Usuário"
                                     no-data-text="Nenhum tipo encontrado cadastrado"
-                                    :rules="validation.user_type"
+                                    :rules="validation.type"
                                     required
                                 ></v-autocomplete>
                             </v-form>
@@ -46,7 +46,7 @@ export default {
             dialog: false,
             data: [],
             valid: false,
-            user_type: null,
+            type: null,
             user_id: null,
             users_types: [
                 'Professor',
@@ -59,7 +59,7 @@ export default {
                     login: [
                         v => !!v || 'Login é obrigatório'
                     ],
-                    user_type: [
+                    type: [
                         v => !!v || 'Tipo de usuário é obrigatório'
                     ],
             },
@@ -71,7 +71,7 @@ export default {
             this.user_id = user.id;
             this.data.name = user.name;
             this.data.login = user.login;
-            this.user_type = user.user_type;
+            this.type = user.type;
         });
     },
     methods: {
@@ -79,11 +79,16 @@ export default {
             let dataOrganized = {
                 'name': this.data.name,
                 'login': this.data.login,
-                'user_type': this.users_types.indexOf(this.user_type) + 1,
+                'type': this.users_types.indexOf(this.type) + 1,
             }
             this.dialog = false;
             this.$refs.form.reset();
-            this.$store.dispatch('user/update', [this.user_id, dataOrganized]);
+            this.$store.dispatch('user/update', [this.user_id, dataOrganized]).then((res) => {
+                if (dataOrganized.type == 2) {
+                    dataOrganized['id'] = this.user_id;
+                    this.$store.commit('user/updateStudentsList', dataOrganized);
+                }
+            });
         },
     }
 }

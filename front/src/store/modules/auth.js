@@ -2,13 +2,17 @@ import axios from 'axios';
 const qs = require('qs');
 
 const state = {
-    isLogged: false
+    isLogged: false,
+    user: [],
 }
 
 const mutations = {
     updateLogged(state, data) {
         state.isLogged = data;
-    }
+    },
+    updateUser(state, user) {
+        state.user = user;
+    },
 }
 
 const actions = {
@@ -24,7 +28,12 @@ const actions = {
     logout(context) {
         window.localStorage.removeItem('token');
         context.commit('updateLogged', false);
-    }
+    },
+    getUser(context) {
+        return axios.get('/api/me').then ((res) => {
+            context.commit('updateUser', res.data);
+        });
+    },
 }
 
 const namespaced = true;

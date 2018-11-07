@@ -6,69 +6,97 @@ export default function (endpoint) {
     const state = {
         all: [],
         teachers: [],
-        user: [],
         users_turmas: [],
+        contador: false,
     }
     
     const getters = {
         byId: state => (id) => {
-            const data = _.find(state.all, (project) => {
-                return project.id == id;
+            const data = _.find(state.all, (obj) => {
+                return obj.id == id;
             });
     
             return data || {};
         },
-        students: state => (index) => {            
-            const students = _.filter(state.users_turmas[index]['stundents_list'], (student) => {
-                return student['id'];
+        byClassId: state => (classId) => {
+            //Rodar usersturmas para pegar os alunos de lá
+            //fazer parte do backend para adiconar aluno ao users_turmas;
+            const request_class = _.find(state.users_turmas, (_class) => {
+                return _class['schoolclass_id'] == classId;
             });
-
+            return request_class['students_list'];
+        },
+        byNotClassId: state => (classId) => {
+            //Rodar users para pegar alunos de lá
+            const request_class = _.find(state.users_turmas, (_class) => {
+                return _class['schoolclass_id'] == classId;
+            });
+            
             let result = [];
             state.all.forEach((user, key) => {
-                if (user['user_type'] == 'Aluno') {
-                    let isStudent = false;
-                    students.forEach(student => {
-                        if (user.id == student.student_id){
-                            isStudent = true;
+                if (user['type'] == 'Aluno') {
+                    let isInClass = false;
+                    request_class['students_list'].forEach(student => {
+                        if (user.id == student.id){
+                            isInClass = true;
                         }
                     })
-                    if (!isStudent) {
+                    if (!isInClass) {
                         result[key] = user['id'] + ' - ' + user['name'];
                     }
                 }
             });
 
-            return result;
+            var resultClean = _.filter(result, (student) => {
+                return typeof student != 'undefined';
+            })
+
+            return resultClean;
         }
     }
     
     const mutations = {
-        setUser(state, user) {
-            state.user = user;
+        addQuestion(state, data){
+            state.all.push(data);
         },
-        updateTurma(state, data) {            
+        delQuestion(state, id){
+            state.all.splice(id, 1);
+        },
+        edtQuestion(state, data){
+            state.all.splice(data[0],0,data[1]);
+            state.all.splice(data[0] + 1, 1);
+        },
+        updateQuestionnaire(state, data){
             for (let i = 0; i < state.all.length; i++) {
                 if (state.all[i]['id'] === data['id']){
                     state.all[i]['title'] = data['title'];
-                    state.all[i]['id_professor'] = data['id_professor'];
+                    state.all[i]['is_public'] = data['is_public'];
+                    state.all[i]['is_test'] = data['is_test'];
+                    state.all[i]['random_answers'] = data['random_answers'];
                     break;
                 }
             }
         },
-        updateUserTurmas(state, data) {
-
+        updateClass(state, data) {            
+            for (let i = 0; i < state.all.length; i++) {
+                if (state.all[i]['id'] === data['id']){
+                    state.all[i]['title'] = data['title'];
+                    state.all[i]['id_teacher'] = data['id_teacher'];
+                    break;
+                }
+            }
         },
         updateUser(state, data) {
-            data['user_type'] = data['user_type'] == 1 ? 'Professor' : 'Aluno';
+            data['type'] = data['type'] == 1 ? 'Professor' : 'Aluno';
             for (let i = 0; i < state.all.length; i++) {
                 if (state.all[i]['id'] === data['id']){
                     state.all[i]['name'] = data['name'];
                     state.all[i]['login'] = data['login'];
-                    state.all[i]['user_type'] = data['user_type'];
+                    state.all[i]['type'] = data['type'];
                     break;
                 }
             }
-            if(data['user_type'] == 'Professor') {
+            if(data['type'] == 'Professor') {
                 for (let i = 0; i < state.teachers.length; i++) {
                     if (state.teachers[i]['id'] == data['id']){
                         state.teachers[i]['name'] = data['name'];
@@ -76,7 +104,28 @@ export default function (endpoint) {
                 }
             }
         },
-        setUsersTurmas(state, data) {
+        updateStudentsList(state, data) {
+            state.users_turmas.forEach((classes, c_key) => {
+                classes['students_list'].forEach((student, s_key) => {
+                    if (student['id'] == data['id']){
+                        state.users_turmas[c_key]['students_list'][s_key]['name'] = data['name'];
+                    }
+                })
+            });
+        },
+        addStudentsList(state, data) {
+            state.users_turmas.push({'schoolclass_id': data, students_list: []})
+        },
+        deleteStudentsList(state, data) {
+            state.users_turmas.forEach((classes, c_key) => {
+                classes['students_list'].forEach((student, s_key) => {
+                    if (student['id'] == data){
+                        state.users_turmas[c_key]['students_list'].splice(s_key, 1);
+                    }
+                })
+            });
+        },
+        updateUsersSchoolClasses(state, data) {
             state.users_turmas = data;
         },
         updateAll(state, data) {
@@ -88,12 +137,23 @@ export default function (endpoint) {
 
         },
         mergeUser(state, data) {
-            data['user_type'] = data['user_type'] == 1 ? 'Professor' : 'Aluno';
-            state.teachers.push(data);
+            data['type'] = data['type'] == 1 ? 'Professor' : 'Aluno';
+            if(data['type'] == "Professor"){
+                state.teachers.push(data);
+            }
             state.all.push(data);
         },
         mergeUserTurma(state, data) {
-            
+            state.users_turmas.forEach((schoolclass, key) => {
+                if (schoolclass['schoolclass_id'] == data['class_id']){
+                    let student = {
+                        id: data['student']['id'],
+                        name: data['student']['name']
+                    }
+                    state.users_turmas[key]['students_list']
+                        .push(student);
+                }
+            })
         },
         delete(state, data) {
             for (let index = 0; index < state.all.length; index++) {
@@ -101,15 +161,31 @@ export default function (endpoint) {
                 state.all.splice(index, 1);
             }
         },
+        deleteUsersTurmas(state, data) {
+            state.users_turmas.forEach((schoolclass, sc_key) => {
+                if (schoolclass['schoolclass_id'] == data['class_id']){
+                    state.users_turmas[sc_key]['students_list'].forEach((student, s_key) => {
+                        if (data['student']['id'] == student['id']) {
+                            state.users_turmas[sc_key]['students_list'].splice(s_key, 1);
+                        }
+                    })
+                }
+            })
+        },
         getTeachers(state, data) {
             state.teachers = data;
+        },
+        clean(state){
+            state.all = [];
         },
     }
     
     const actions = {
-        getUser(context) {
-            return axios.get(endpoint).then ((res) => {
-                context.commit('setUser', res.data);
+        addQuestion(context, data) {
+            data = qs.stringify(data);
+            let url = endpoint + '/get?' + data;
+            return axios.get(url).then((res) => {
+                context.commit('addQuestion', res.data);
             });
         },
         getAll(context, id) {
@@ -123,16 +199,22 @@ export default function (endpoint) {
         },
         create(context, data) {
             data = qs.stringify(data);
+            let moduleName = endpoint.split('/')[2];
             return axios.post(endpoint, data).then((res) => {
-                if (endpoint.split('/')[2] == 'user') {
+                if (moduleName == 'user') {
                     context.commit('mergeUser', res.data);
+                } else if (moduleName == 'questionnaires'){
+                    context.commit('merge', res.data);
                 } else {
                     context.commit('merge', res.data);
                 }
             });
         },
-        createUserTurma(context, data) {
-            context.commit('mergeUserTurma', data);
+        createQuestion(context, data) {
+            let url = endpoint + '?id=' + data[0];
+            data[1] = qs.stringify(data[1]);
+            return axios.post(url, data[1]).then(() => {
+            })
         },
         update(context, data)  {
             let url = endpoint + '?id='+data[0];
@@ -142,23 +224,50 @@ export default function (endpoint) {
                 updated['id'] = data[0];
                 let moduleName = endpoint.split('/')[2];
                 if (moduleName == 'user') {
-                    context.commit('updateUser', res.data);
-                    /**TODO
-                     * Atualizar o usersTurmas
-                     */
-                } else if(moduleName == 'projects') {
-                    context.commit('updateTurma', updated);
-                    /**TODO
-                     * Atualizar o usersTurmas
-                     */
+                    context.commit('updateUser', updated);                    
+                } else if(moduleName == 'schoolclasses') {
+                    context.commit('updateClass', updated);
+                } else if(moduleName == 'questionnaires'){
+                    console.log('back-end');
+                    console.log(data);
+                    console.log(res.data);
+                    context.commit('updateQuestionnaire', res.data);
                 }
+            })
+        },
+        updateAll(context, data)  {
+            let url = endpoint + '?id=' + data[0];
+            data[1] = qs.stringify(data[1]);
+            return axios.put(url, data[1]).then((res) => {
+                let updated = qs.parse(res.config.data);
+                context.commit('updateAll', updated);
             })
         },
         delete(context, id) {
             return axios.delete(endpoint + '?id=' + id).then(res => {
                 context.commit('delete', res.data);
             })
-        },        
+        },
+        createUserTurma(context, data) {
+            let url = endpoint + '/turmas';
+            data = qs.stringify(data);
+            return axios.post(url, data).then((res) => {
+                context.commit('mergeUserTurma', res.data);
+            });            
+            //Colocar em "create"
+        },
+        getUsersTurmas(context) {
+            let url = endpoint + '/turmas';
+            return axios.get(url).then((res) => {
+                context.commit('updateUsersSchoolClasses', res.data);
+            })
+        },
+        deleteUsersTurmas(context, data) {
+            let url = endpoint + '/turmas?student=' + data[0] + '&class=' + data[1];
+            return axios.delete(url).then((res) => {
+                context.commit('deleteUsersTurmas', res.data);
+            })
+        },
         getTeachers(context) {
             let url = '/api/teachers';
             return axios.get(url).then((res) => {
@@ -166,15 +275,9 @@ export default function (endpoint) {
             })
         }, 
         getUsers(context) {
-            let url = endpoint + '_getall';
+            let url = endpoint + 's';
             return axios.get(url).then((res) => {
                 context.commit('updateAll', res.data);
-            })
-        },
-        getUsersTurmas(context) {
-            let url = endpoint + '/turmas';
-            return axios.get(url).then((res) => {
-                context.commit('setUsersTurmas', res.data);
             })
         },
         getClassViewPermission(context, turma_id) {

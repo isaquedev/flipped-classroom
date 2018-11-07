@@ -28,7 +28,7 @@
                         <td >{{props.item.id}}</td>
                         <td >{{props.item.name}}</td>
                         <td >{{props.item.login}}</td>
-                        <td class="text-xs-center">{{props.item.user_type}}</td>
+                        <td class="text-xs-center">{{props.item.type}}</td>
                     <td class="text-xs-left">
                     <v-icon
                         small
@@ -81,7 +81,7 @@ export default {
                 {text: 'ID', value: 'id'},
                 {text: 'Nome', value: 'name'},
                 {text: 'Login', value: 'login'},
-                {text: 'Tipo Usuário', value: 'user_type'},
+                {text: 'Tipo Usuário', value: 'type'},
                 {text: 'Ações', value: 'header', sortable: false}
             ],
         }

@@ -18,6 +18,6 @@ export default {
     isLogged() {
       return this.$store.state.auth.isLogged;
     }
-  }
+  },
 }
 </script>

@@ -25,11 +25,11 @@
                                     required
                                 ></v-text-field>
                                 <v-autocomplete
-                                    v-model="user_type"
+                                    v-model="type"
                                     :items="users_types"
                                     label="Tipo de Usuário"
                                     no-data-text="Nenhum tipo encontrado cadastrado"
-                                    :rules="validation.user_type"
+                                    :rules="validation.type"
                                     required
                                 ></v-autocomplete>
                             </v-form>
@@ -48,7 +48,7 @@ export default {
             dialog: false,
             data: [],
             valid: false,
-            user_type: null,
+            type: null,
             users_types: [
                 'Professor',
                 'Aluno',
@@ -63,7 +63,7 @@ export default {
                     password: [
                         v => !!v || 'Senha é obrigatório'
                     ],
-                    user_type: [
+                    type: [
                         v => !!v || 'Tipo de usuário é obrigatório'
                     ],
             },
@@ -75,11 +75,11 @@ export default {
                 'name': this.data.name,
                 'login': this.data.login,
                 'password': this.data.password,
-                'user_type': this.users_types.indexOf(this.user_type) + 1,
+                'type': this.users_types.indexOf(this.type) + 1,
             }
             this.dialog = false;
             this.$refs.form.reset();
-            this.$store.dispatch('user/create', dataOrganized);            
+            this.$store.dispatch('user/create', dataOrganized);
         },
     }
 }

@@ -2,11 +2,7 @@
 
 Front
 
- - crud.js
-    - Atualizar o usersTurmas ao atualizar um usuário ou atualizar uma turma;
  - sections/Create.vue
     - Adicionar um editor de texto para possibitar links -> https://vuejsexamples.com/tag/editor/
  - sections/View.vue
     - Api para o youtube -> https://vuejsexamples.com/a-simple-layer-for-you-to-use-your-imagination-while-over-the-youtube-api/
- - turmas/View.vue
-    - Mover gerenciamento de alunos para cá

@@ -2,7 +2,7 @@
     <div>
         <v-navigation-drawer app v-model="drawer" clipped>
         <v-list>
-            <v-list-tile to="/projects">
+            <v-list-tile to="/schoolclasses">
                 <v-list-tile-action>
                     <v-icon>class</v-icon>
                 </v-list-tile-action>
@@ -13,7 +13,7 @@
                 </v-list-tile-content>
             </v-list-tile>            
 
-            <v-list-tile v-if="user.user_type == 1" to="/quiz">
+            <v-list-tile v-if="user.type == 1" to="/questionnaires">
                 <v-list-tile-action>
                     <v-icon>format_list_numbered</v-icon>
                 </v-list-tile-action>
@@ -24,24 +24,13 @@
                 </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile v-if="user.user_type == 0" to="/users">
+            <v-list-tile v-if="user.type == 0" to="/users">
                 <v-list-tile-action>
                     <v-icon>people</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
                     <v-list-tile-title>
                         Usuários
-                    </v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile v-if="user.user_type == 0" to="/students-manager">
-                <v-list-tile-action>
-                    <v-icon>people</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>
-                        Gerenciamento de Alunos
                     </v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
@@ -79,7 +68,7 @@ export default {
     }, 
     computed: {              
         user() {
-            return this.$store.state.user.user;
+            return this.$store.state.auth.user;
         },
     },
     methods: {

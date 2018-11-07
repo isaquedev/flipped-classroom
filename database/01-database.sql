@@ -5,24 +5,24 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema pp_project_manager
+-- Schema flipped_classsroom_edu_system
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema pp_project_manager
+-- Schema flipped_classsroom_edu_system
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `pp_project_manager` DEFAULT CHARACTER SET utf8 ;
-USE `pp_project_manager` ;
+CREATE SCHEMA IF NOT EXISTS `flipped_classroom_edu_system` DEFAULT CHARACTER SET utf8 ;
+USE `flipped_classroom_edu_system` ;
 
 -- -----------------------------------------------------
 -- Table `users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `login` VARCHAR(250) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `login` VARCHAR(50) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
-  `user_type` VARCHAR(1) NOT NULL,
+  `type` TINYINT(1) NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`))
@@ -30,18 +30,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `turmas`
+-- Table `schoolclasses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `projects` (
+CREATE TABLE IF NOT EXISTS `schoolclasses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NOT NULL,
-  `id_professor` INT UNSIGNED NOT NULL,
+  `title` VARCHAR(50) NOT NULL,
+  `id_teacher` INT UNSIGNED NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_turmas_users_idx` (`id_professor` ASC),
-  CONSTRAINT `fk_turmas_users`
-    FOREIGN KEY (`id_professor`)
+  INDEX `fk_schoolclasses_users_idx` (`id_teacher` ASC),
+  CONSTRAINT `fk_schoolclasses_users`
+    FOREIGN KEY (`id_teacher`)
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -50,110 +50,120 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `users_turmas
+-- Table `users_schoolclasses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `users_turmas` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `id_aluno` INT UNSIGNED NOT NULL,
-  `id_turma` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_users_turmas_users_idx` (`id_aluno` ASC),
-  INDEX `fk_users_turmas_turmas_idx` (`id_turma` ASC),  
-  CONSTRAINT `fk_users_turmas_users`
-    FOREIGN KEY (`id_aluno`)
+CREATE TABLE IF NOT EXISTS `users_schoolclasses` (
+  `id_student` INT UNSIGNED NOT NULL,
+  `id_schoolclasses` INT UNSIGNED NOT NULL,
+  INDEX `fk_users_schoolclasses_users_idx` (`id_student` ASC),
+  INDEX `fk_users_schoolclasses_schoolclasses_idx` (`id_schoolclasses` ASC),  
+  CONSTRAINT `fk_users_schoolclasses_users`
+    FOREIGN KEY (`id_student`)
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_users_turmas_turmas`
-    FOREIGN KEY (`id_turma`)
-    REFERENCES `projects` (`id`)
+  CONSTRAINT `fk_users_schoolclasses_schoolclasses`
+    FOREIGN KEY (`id_schoolclasses`)
+    REFERENCES `schoolclasses` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
 )
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `aulas`
+-- Table `questionnaires`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sections` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NOT NULL,
-  `description` TEXT NULL,
-  `turma_id` INT UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `questionnaires` (
+  `id`INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(50) NOT NULL,
+  `id_teacher` INT UNSIGNED NOT NULL,
+  `is_public` TINYINT(1) NOT NULL,
+  `is_test` TINYINT(1) NOT NULL,
+  `duration` INT NOT NULL,
+  `random_answers` TINYINT(1) NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_sections_turmas_idx` (`turma_id` ASC),
-  CONSTRAINT `fk_sections_turmas`
-    FOREIGN KEY (`turma_id`)
-    REFERENCES `projects` (`id`)
+INDEX `fk_questionnaire_users_idx` (`id_teacher` ASC),
+  CONSTRAINT `fk_questionnaire_users`
+    FOREIGN KEY (`id_teacher`)
+    REFERENCES `users` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
--- Table `conteudo_aula`
+-- Table `questions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tasks` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NOT NULL,
-  `description` VARCHAR(45) NULL,
-  `done` TINYINT NOT NULL DEFAULT 0,
-  `due_date` DATETIME NULL,
-  `assigned_to` INT UNSIGNED NOT NULL,
-  `turma_id` INT UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id`INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `enunciation` TEXT NOT NULL,
+  `correct_answer` TEXT NOT NULL,
+  `incorrect_answer1` TEXT NOT NULL,
+  `incorrect_answer2` TEXT NOT NULL,
+  `incorrect_answer3` TEXT NOT NULL,
+  `incorrect_answer4` TEXT NOT NULL,
+  `id_questionnaire` INT UNSIGNED NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_tasks_sections1_idx` (`turma_id` ASC),
-  INDEX `fk_tasks_users_turmas1_idx` (`assigned_to` ASC),
-  CONSTRAINT `fk_tasks_sections1`
-    FOREIGN KEY (`turma_id`)
-    REFERENCES `sections` (`id`)
+INDEX `fk_questions_questionnaires_idx` (`id_questionnaire` ASC),
+  CONSTRAINT `fk_questions_questionnaires`
+    FOREIGN KEY (`id_questionnaire`)
+    REFERENCES `questionnaires` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `users_questionnaire`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `users_questionnaires` (
+  `id_student` INT UNSIGNED NOT NULL,
+  `id_questionnaire` INT UNSIGNED NOT NULL,
+  `is_done` TINYINT(1) NOT NULL,
+  `grades` INT NOT NULL,
+  INDEX `fk_users_questionnaires_users_idx` (`id_student` ASC),
+  INDEX `fk_users_questionnaires_questionnaires_idx` (`id_questionnaire` ASC),  
+  CONSTRAINT `fk_users_questionnaires_users`
+    FOREIGN KEY (`id_student`)
+    REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tasks_users_turmas1`
-    FOREIGN KEY (`assigned_to`)
-    REFERENCES `users_turmas` (`id`)
+  CONSTRAINT `fk_users_questionnaires_questionnaires`
+    FOREIGN KEY (`id_questionnaire`)
+    REFERENCES `questionnaires` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `subtasks`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subtasks` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NULL,
-  `done` TINYINT NULL DEFAULT 0,
-  `task_id` INT UNSIGNED NOT NULL,
-  `user_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_subtasks_tasks1_idx` (`task_id` ASC),
-  CONSTRAINT `fk_subtasks_tasks1`
-    FOREIGN KEY (`task_id`)
-    REFERENCES `tasks` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `schedules`
+-- Table `lessons`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `schedules` (
+CREATE TABLE IF NOT EXISTS `lessons` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `description` TEXT NOT NULL,
-  `due_date` DATETIME NOT NULL,
-  `user_id` INT UNSIGNED NOT NULL,
+  `title` VARCHAR(50) NOT NULL,
+  `release_date` DATETIME NOT NULL,
+  `id_schoolclasses` INT UNSIGNED NOT NULL,
+  `text_content` TEXT,
+  `video` VARCHAR(100),
+  `id_questionnaire` INT UNSIGNED,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_schedules_projects1_idx` (`user_id` ASC),
-  CONSTRAINT `fk_schedules_projects1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `projects` (`id`)
+  INDEX `fk_lessons_schoolclasses_idx` (`id_schoolclasses` ASC),
+  INDEX `fk_lessons_questionnaire_idx` (`id_questionnaire` ASC),
+  CONSTRAINT `fk_lessons_schoolclasses`
+    FOREIGN KEY (`id_schoolclasses`)
+    REFERENCES `schoolclasses` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_lessons_questionnaire`
+    FOREIGN KEY (`id_questionnaire`)
+    REFERENCES `questionnaires` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

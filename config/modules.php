@@ -2,6 +2,6 @@
 
 $modules = [
     __DIR__ . '/../app/Module.php' => 'App\Module',
-    __DIR__ . '/../modules/tasks/Module.php' => 'UNI\Framework\Tasks\Module',
-    __DIR__ . '/../modules/schedules/Module.php' => 'UNI\Framework\Schedules\Module',
+    __DIR__ . '/../modules/SchoolClasses/Module.php' => 'UNI\Framework\SchoolClasses\Module',
+    __DIR__ . '/../modules/Questionnaires/Module.php' => 'UNI\Framework\Questionnaires\Module',
 ];

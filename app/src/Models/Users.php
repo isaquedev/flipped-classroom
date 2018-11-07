@@ -16,51 +16,52 @@ class Users extends Model
         return parent::get(['login' => $login]);
     }
 
-    public function getUsers() {
-        $query = "SELECT * FROM users WHERE user_type <> 0";
+    public function allById($where) {
+        $query = "SELECT * FROM users WHERE type {$where}";
 
         $users = parent::customQuery($query);
 
         foreach ($users as $key => $user) {
-            $users[$key]['user_type'] = $user['user_type'] == 1 ? 'Professor' : 'Aluno';
+            $users[$key]['type'] = $user['type'] == 1 ? 'Professor' : 'Aluno';
         }
 
         return $users;
     }
 
-    public function getUsersTurmas() {        
-        $query = "SELECT u.id AS student_id, u.name AS student_name, t.id AS turma_id
-                  FROM users u, users_turmas ut, projects t
-                  WHERE u.id = ut.id_aluno AND ut.id_turma = t.id AND ut.id_aluno <> t.id_professor";
+    public function getUsersTurmas() {
+        $query = "SELECT u.id AS student_id, u.name AS student_name, c.id AS schoolclass_id
+                  FROM users u, users_schoolclasses us, schoolclasses c
+                  WHERE u.id = us.id_student AND us.id_schoolclasses = c.id AND us.id_student <> c.id_teacher";
 
         $students = parent::customQuery($query);
 
-        $turmas = parent::all([], 'projects');
+        $turmas = parent::all([], 'schoolclasses');
 
         $result = [];
-
         foreach($turmas as $t_key => $turma) {
-            $result[$t_key]['turma_id'] = $turma['id'];
-            $result[$t_key]['turma_name'] = $turma['title'];
+            $result[$t_key]['schoolclass_id'] = $turma['id'];
             $students_list = [];
             foreach ($students as $s_key => $student) {
-                if($student['turma_id'] == $turma['id']){
-                    $students_list[$s_key]['student_id'] = $student['student_id'];
-                    $students_list[$s_key]['student_name'] = $student['student_name'];
+                if($student['schoolclass_id'] == $turma['id']){
+                    $students_list[sizeOf($students_list)] = [
+                        'id' => $student['student_id'],
+                        'name' => $student['student_name']
+                    ];
                 }
             }
-            $result[$t_key]['stundents_list'] = $students_list;
+            (array) $result[$t_key]['students_list'] = $students_list;
         }
 
         return $result;
     }
 
-    /* 
-    SELECT
-    u.id AS student_id, u.name AS student_name, t.id AS turma_id
-FROM
-    users u, users_turmas ut, projects t
-WHERE
-    u.id = ut.id_aluno AND ut.id_turma = t.id AND ut.id_aluno <> t.id_professor;
-    */
+    public function createUsersTurmas($data) {
+        $student =  parent::create($data, 'users_schoolclasses', false);
+
+        $query = "SELECT name FROM users WHERE id=?";
+        $bind = [$student['id_student']];
+        $request_student = parent::customQuery($query, $bind);
+        
+        return $request_student;
+    }
 }
