@@ -29,13 +29,12 @@ class Router{
             }
         }
         
-        throw new HttpException('Page not found', 404);
-        
+        throw new HttpException('Page not found', 202);
     }
 
     public function getCurrentUrl()
     {
-        $url = $_SERVER['REQUEST_URI '] ?? '/';
+        $url = $_SERVER['REQUEST_URI'] ?? '/';
 
         if (strlen($url) > 1) {
             $url = rtrim($url, '/');
