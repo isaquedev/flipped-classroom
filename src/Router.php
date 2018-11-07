@@ -34,7 +34,7 @@ class Router{
 
     public function getCurrentUrl()
     {
-        $url = $_SERVER['REQUEST_URI'] ?? '/';
+        $url = $_SERVER['PATH_INFO'] ?? '/';
 
         if (strlen($url) > 1) {
             $url = rtrim($url, '/');

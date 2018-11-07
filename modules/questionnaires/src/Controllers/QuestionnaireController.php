@@ -26,9 +26,13 @@ class QuestionnaireController extends CrudController
     }
 
     public function index($c, $request){
-        $id = $request->query->get('id');
-        
-        return $c[$this->getModel()]->all([$id]);
+        $url = explode("/", $request->attributes->all()[0]);
+        $id = $url[sizeOf($url) - 1];
+        if ($id != explode("_", $this->getModel()[0])){
+            return $c[$this->getModel()]->all([$id]);
+        } else {
+            return $c[$this->getModel()]->all();
+        }
     }
 
 }
