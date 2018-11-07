@@ -21,6 +21,8 @@
                     label="Link do vídeo"
                 ></v-text-field>
 
+                {{questionnaires}}
+
                 <v-autocomplete
                         v-model="questionnaire"
                         :items="questionnaires"
@@ -90,6 +92,11 @@ export default {
 
     components: {
         VueEditor
+    },
+    computed: {
+        questionnaires() {
+            return this.$store.state.questionnaires.all;
+        }
     },
     data() {
         return {

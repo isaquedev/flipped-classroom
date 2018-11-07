@@ -1,18 +1,15 @@
 <template>
     <v-layout row wrap>        
         <v-container grid-list-md> 
-            <list-schoolclasses/>
+            <router-view/>
         </v-container>
     </v-layout>
 </template>
 
 <script>
-import ListSchoolClasses from './schoolclasses/List';
 
 export default {
-    components: {
-        'list-schoolclasses': ListSchoolClasses,
-    }
+    
 }
 </script>
 
