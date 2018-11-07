@@ -64,19 +64,9 @@ class UsersController extends CrudController
         return ['token' => $token];
     }
 
-    function getallheaders() {
-        $headers = [];
-        foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) == 'HTTP_') {
-                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-            }
-        }
-        return $headers;
-        }
-
     public function getCurrentUser($c)
     {
-        $token = getallheaders()['Authorization'] ?? null;
+        $token = $this->getallheaders()['Authorization'] ?? null;
 
         if (!$token) {
             $token = filter_input(\INPUT_GET, 'token');
@@ -94,6 +84,16 @@ class UsersController extends CrudController
         }
 
         return (array)$data;
+    }
+
+    public function getallheaders() {
+        $headers = [];
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+        return $headers;
     }
 
     public function getTeachers($c, $request)
