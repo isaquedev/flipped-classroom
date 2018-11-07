@@ -34,7 +34,7 @@ $container['settings'] = function() {
 };
 
 $container['db'] = function($c) {
-    $isOnline = false;
+    $isOnline = true;
     $db = $isOnline == true ? $c['settings']['db']['online'] : $c['settings']['db']['offline'];
     $dsn = $c['settings'][$db]['dsn'] . ';port=' . $c['settings'][$db]['port'] . ';dbname=' . $c['settings'][$db]['database'];
     $username = $c['settings'][$db]['username'];
