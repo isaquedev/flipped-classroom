@@ -18,6 +18,13 @@ export default function (endpoint) {
     
             return data || {};
         },
+        teacherById: state => (id) => {
+            const data = _.find(state.teachers, (obj) => {
+                return obj.id == id;
+            });
+    
+            return data || {};
+        },
         byClassId: state => (classId) => {
             //Rodar usersturmas para pegar os alunos de lá
             //fazer parte do backend para adiconar aluno ao users_turmas;
@@ -63,6 +70,11 @@ export default function (endpoint) {
     }
     
     const mutations = {
+        sortLessons(state) {
+            state.all.sort(function(a,b){
+                return new Date(a['release_date']) - new Date(b['release_date']);
+            });
+        },
         addQuestion(state, data){
             state.all.push(data);
         },

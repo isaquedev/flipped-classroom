@@ -112,20 +112,13 @@ class UsersController extends CrudController
 
     public function createUsersTurmas($c, $request) {
         $student =  $c[$this->getModel()]->create($request->request->all(), 'users_schoolclasses', false);
-
         return $this->getStudent($c, $student['id_student'], $student['id_schoolclasses']);
     }
 
     public function deleteUsersTurmas($c, $request) {
-        $student_id = $request->query->get('student');
-        $class_id = $request->query->get('class');
-
-        $student =  $c[$this->getModel()]->delete(
-            ['id_student' => $student_id, 'id_schoolclasses' => $class_id],
-            'users_schoolclasses'
-        );
-
-        return $this->getStudent($c, $student_id, $class_id);
+        $ids = parent::getIds($request, ['id_schoolclasses', 'id_student'], 2);
+        $student =  $c[$this->getModel()]->delete($ids, 'users_schoolclasses');
+        return $this->getStudent($c, $ids['id_student'], $ids['id_schoolclasses']);
     }
 
     public function getStudent($c, $student_id, $class_id) {

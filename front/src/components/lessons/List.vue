@@ -4,10 +4,17 @@
             <v-card color="blue-grey lighten-5">
                 <v-card-title primary-title class="blue-grey white--text">
                     <div class="headline"> {{ aula.title }}</div>
+                    <v-divider vertical class="mx-3"/>
+                    {{formatData(aula.release_date)}}
                     <v-spacer></v-spacer>
-                    <v-btn color="amber" dark class="mb-2 black--text" @click="show(aula, key)">Entrar</v-btn>
+                    <v-btn v-if="user.type == 1" color="amber" dark class="mb-2 black--text" @click="del(aula)">Remover</v-btn>
+                    <v-btn v-if="user.type == 1" color="amber" dark class="mb-2 black--text" @click="edt(aula, key)">Editar</v-btn>
+                    <v-btn v-if="comparDate(aula.release_date) || user.type != 2" color="amber" dark class="mb-2 black--text" @click="show(aula, key)">Entrar</v-btn>
                 </v-card-title>
-                <v-container v-html="aula.text_content">
+                <v-container>
+                    <v-icon v-if="aula.text_content">description</v-icon>
+                    <v-icon v-if="aula.video">videocam</v-icon>
+                    <v-icon v-if="aula.id_questionnaire">format_list_numbered</v-icon>
                 </v-container>
             </v-card>
         </v-flex>
@@ -15,13 +22,15 @@
             <create v-if="type == user['type'] && turma.id_teacher == user['id']"/>
         </v-flex>
         <show/>
+        <lesson-delete/>
     </v-layout>
 </template>
 
 <script>
     import create from './Create';
     import show from './Show';
-    import { eventHub } from '../../eventHub'
+    import lDelete from './Delete';
+    import { eventHub } from '../../eventHub';
 
     export default {
         props: [
@@ -32,22 +41,6 @@
                 return this.$store.state.auth.user;
             },
         },
-        watch: {
-            user: function (to, from) { //Caso entre direto na url da turma de fora do sistema
-                if (this.user.type == 0) {
-                } else {
-                    this.getViewPermission();
-                }
-            },
-            turma: function (to, from) {    //Quando troco de uma turma para outra via url
-                if(to.id == null) {
-                    window.location = '/';
-                } else {
-                    this.getingAulas = false;
-                    this.getAulas();
-                }
-            },
-        },
         data() {
             return {
                 type: 1,
@@ -55,12 +48,22 @@
                 aulas: [],
             }
         },
-
         components: {
             create,
             show,
-        }, 
-        mounted() { //Quando entro normalmente na turma ou via url direta anteriormente estando em outra parte do sistema            
+            'lesson-delete': lDelete,
+        },
+        mounted() {
+            if (this.user.length != 0) {
+                this.getingAulas = false;
+                if (this.user.type == 0) {
+                    this.getAulas();
+                } else {
+                    this.getViewPermission();
+                }
+            }
+        },
+        beforeUpdate() {
             if (this.user.length != 0) {
                 this.getingAulas = false;
                 if (this.user.type == 0) {
@@ -85,13 +88,36 @@
             getAulas() {
                 if (!this.getingAulas){
                     this.$store.dispatch('lessons/getAll', this.$route.params.id).then(() => {
+                        this.$store.commit('lessons/sortLessons');
                         this.aulas = this.$store.state.lessons.all;
                     });
                 }
                 this.getingAulas = true;
             },
             show(aula, id){
-                eventHub.$emit('show-lesson', id, aula)
+                eventHub.$emit('show-lesson', id, aula);
+            },
+            edt(aula, id){
+                
+            },
+            del(aula){
+                eventHub.$emit('del-lesson', aula);
+            },
+            formatData(date){
+                return date.substring(8,10) + ' de ' + this.getMonth(date.substring(5,7))
+                    + ' (' + date.substring(11,16) + ')';
+            },
+            getMonth(month){
+                return ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][month - 1];
+            },
+            comparDate(date){
+                const actualDate = new Date();
+                let requestDateTime = new Date(date);
+                if (requestDateTime < actualDate){
+                    return true;
+                } 
+                return false;
             }
         }
     }

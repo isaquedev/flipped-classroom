@@ -37,7 +37,7 @@
             },
             teacher() {
                 const id = this.turma['id_teacher'];
-                return this.$store.getters['user/byId'](id);
+                return this.$store.getters['user/teacherById'](id);
             },
             user() {
                 return this.$store.state.auth.user;

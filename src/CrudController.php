@@ -52,14 +52,13 @@ abstract class CrudController
         }
     }
 
-    public function getIds($request, $key){
+    public function getIds($request, $key, $qtes){
         $url = explode("/", $request->attributes->all()[0]);
-        $id = $url[sizeOf($url) - 1];
-        if ($id != explode("_", $this->getModel())[0]){
-            return [$key => $id];
-        } else {
-            return [];
+        $response = [];
+        for ($i=0; $i < $qtes; $i++) { 
+            $response[$key[$i]] = $url[sizeOf($url) - 1 - $i];
         }
+        return $response;
     }
 
 }

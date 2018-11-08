@@ -104,7 +104,7 @@ export default {
             timep: false,
             content: '',
             due_date: null,
-            due_date_time: "12:00",
+            due_date_time: null,
             questionnaire: null,
             validation: {
             title: [v => !!v || "Título é obrigatório"],
@@ -115,20 +115,20 @@ export default {
     submit() {
       this.data.id_schoolclasses = this.$route.params.id;
       this.data.release_date = this.due_date + " " + this.due_date_time;
+      this.data.id_questionnaire = this.questionnaire.split(" ")[0];
       this.$store.dispatch("lessons/create", this.data).then(res => {
         this.data.text_content = "";
         this.$refs.form.reset();
+        this.$store.commit('lessons/sortLessons');
       });
     },
-  }, 
-  watch: {
-      content: function(to, from) {
-          console.log(to);
-      }
   },
   mounted() {
     const date = new Date();
+    date.setDate(date.getDate() - 1);
     this.due_date = date.toISOString().substr(0, 10);
+    date.setHours(date.getHours() - 2);
+    this.due_date_time = date.toISOString().substring(11,16);
   },
 };
 </script>

@@ -10,11 +10,10 @@
                 </v-btn>
                 <v-toolbar-title> {{lesson.title}} </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <!--create-student/-->
             </v-toolbar>
             <v-container>
                 <div v-html="lesson.text_content"></div>
-                <youtube :video-id="videoId"
+                <youtube v-if="videoId" :video-id="videoId"
                     @ended="videoEnd()"></youtube>
                 
             </v-container>
@@ -45,8 +44,8 @@ export default {
     },
     methods: {
         loadVideo(url){
-            this.videoId = this.$youtube.getIdFromURL(url);
-            console.log(this.videoId);
+            if (url != null)
+                this.videoId = this.$youtube.getIdFromURL(url);
         },
         close(){
             this.dialog = false;

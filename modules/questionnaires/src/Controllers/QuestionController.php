@@ -17,8 +17,8 @@ class QuestionController extends CrudController
     }
 
     public function create($c, $request) {
-        $id = $request->query->get('id');
-        $questions = $request->request->all();
+        $id = $request->request->get('0');
+        $questions = $request->request->get('1');
         $retorno = [];
         foreach ($questions as $key => $question) {
             $question['id_questionnaire'] = $id;
@@ -28,14 +28,14 @@ class QuestionController extends CrudController
     }
 
     public function update($c, $request) {
-        $question = $request->request->all();
-        $id = $request->query->get('id');
+        $id = $request->request->get('0');
+        $questions = $request->request->get('1');
         $c[$this->getModel()]->delete(['id_questionnaire' => $id]);
         return $this->create($c, $request);
     }
 
     public function retorno($c, $request) {
-        return $request->query->all();
+        return $request->request->all();
     }
 
 }

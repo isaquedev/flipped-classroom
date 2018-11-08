@@ -8,3 +8,4 @@ $router->add('DELETE',  '/api/schoolclasses/(\d)+',   'UNI\Framework\SchoolClass
 $router->add('GET',     '/api/lessons/(\d)+', 'UNI\Framework\SchoolClasses\Controllers\LessonsController::listByTurma');
 $router->add('POST',    '/api/lessons', 'UNI\Framework\SchoolClasses\Controllers\LessonsController::create');
 $router->add('GET',     '/api/lessons/permission/(\d)+', 'UNI\Framework\SchoolClasses\Controllers\LessonsController::havePermission');
+$router->add('DELETE',  '/api/lessons/(\d)+',   'UNI\Framework\SchoolClasses\Controllers\LessonsController::delete');
