@@ -186,7 +186,8 @@
                         eventHub.$emit('questionnaire-show', id, true);
                     }
                 } else {
-                    eventHub.$emit('questionnaire-show', id, false);
+                    //eventHub.$emit('questionnaire-show', id, false);
+                    console.log("em progresso");
                 }
                 
             },
