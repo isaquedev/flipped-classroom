@@ -14,6 +14,13 @@
                     required
                 ></v-text-field>
 
+                <v-text-field
+                    v-model="data.description"
+                    label="Descrição"
+                    :rules="validation.description"
+                    required
+                ></v-text-field>
+
                 <vue-editor v-model="data.text_content"></vue-editor>
 
                 <v-text-field
@@ -34,12 +41,13 @@
                     v-model="datap"
                     :close-on-content-click="false"
                     :return-value.sync="due_date"
-                    required
                 >
                     <v-text-field
                         slot="activator"
                         v-model="due_date"
                         label="Data de entrega"
+                        :rules="validation.date"
+                        required
                         readonly
                     ></v-text-field>
                     <v-date-picker
@@ -50,7 +58,7 @@
                     >
                         <v-btn flat color="secondary" @click="datap = false">Cancelar</v-btn>
                         <v-btn flat color="primary" @click="$refs.dataPicker.save(due_date)">Ok</v-btn>
-                    </v-date-picker>                
+                    </v-date-picker>
                 </v-menu>
                     
                 <v-menu
@@ -64,6 +72,8 @@
                         slot="activator"
                         v-model="due_date_time"
                         label="Hora da entrega"
+                        :rules="validation.date_time"
+                        required
                         readonly
                     ></v-text-field>
                     <v-time-picker
@@ -93,7 +103,7 @@ export default {
     },
     computed: {
         questionnaires() {
-            return this.$store.getters['questionnaires/filter']();
+            return this.$store.getters['questionnaires/filter'](this.$store.getters['lessons/getQuestionnairesInClass']());
         }
     },
     data() {
@@ -107,28 +117,38 @@ export default {
             due_date_time: null,
             questionnaire: null,
             validation: {
-            title: [v => !!v || "Título é obrigatório"],
+                title: [v => !!v || "Título é obrigatório"],
+                description: [v => !!v || "Descrição é obrigatório"],
+                date:  [v => !!v || "Data é obrigatório"],
+                date_time:  [v => !!v || "Hora é obrigatório"],
         }
     };
   },
   methods: {
     submit() {
-      this.data.id_schoolclasses = this.$route.params.id;
+      this.data.id_schoolclass = this.$route.params.id;
+      if(typeof this.due_date == "undefined"){
+
+      }
       this.data.release_date = this.due_date + " " + this.due_date_time;
-      this.data.id_questionnaire = this.questionnaire.split(" ")[0];
+      if(this.questionnaire != null)
+        this.data.id_questionnaire = this.questionnaire.split(" ")[0];
       this.$store.dispatch("lessons/create", this.data).then(res => {
         this.data.text_content = "";
         this.$refs.form.reset();
         this.$store.commit('lessons/sortLessons');
       });
     },
+    resetDate(){
+        const date = new Date();
+        date.setDate(date.getDate());
+        this.due_date = date.toISOString().substr(0, 10);
+        date.setHours(date.getHours() - 2);
+        this.due_date_time = date.toISOString().substring(11,16);
+    }
   },
   mounted() {
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    this.due_date = date.toISOString().substr(0, 10);
-    date.setHours(date.getHours() - 2);
-    this.due_date_time = date.toISOString().substring(11,16);
+      this.resetDate();
   },
 };
 </script>

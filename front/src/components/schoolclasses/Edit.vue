@@ -56,7 +56,7 @@ export default {
             valid: false,
             dialog: false,
             teacher: null,
-            id_schoolclasses: null,
+            id_schoolclass: null,
             data: [],
             validation: {
                     title: [
@@ -69,7 +69,7 @@ export default {
             submit() {
                 this.dialog = false;
                 this.data.id_teacher = this.teacher.split(" ")[0];
-                this.$store.dispatch('schoolclasses/update', [this.id_schoolclasses, this.data]);
+                this.$store.dispatch('schoolclasses/update', [this.id_schoolclass, this.data]);
             },
             
         },
@@ -77,7 +77,7 @@ export default {
     created() {
         eventHub.$on('schoolclasses-edit', (turma) => {
             this.dialog = true;
-            this.id_schoolclasses = turma.id;
+            this.id_schoolclass = turma.id;
             this.data.title = turma.title;
             for (let i = 0; i < this.teachers.length; i++) {
                 if(turma.id_teacher == this.teachers[i].split(" ")[0]){

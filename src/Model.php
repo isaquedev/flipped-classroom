@@ -71,7 +71,7 @@ abstract class Model
     public function create(array $data, $table = null, $haveDate = true)
     {        
         if ($table == null)
-        $table = $this->table;
+            $table = $this->table;
 
         $this->events->trigger('creating.' . $table, null, $data);
 

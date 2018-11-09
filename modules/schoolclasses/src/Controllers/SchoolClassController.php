@@ -15,13 +15,13 @@ class SchoolClassController extends CrudController
         $conditions = [];
         $model = $c[$this->getModel()];
         if ($model->type == 1) {
-            $conditions['id_teacher'] = $model->user_id;
+            $conditions['id_teacher'] = $model->id;
         } else if ($model->type == 2) {
-            $classes = $model->all(['id_student' => $model->user_id], 'users_schoolclasses');
+            $classes = $model->all(['id_student' => $model->id], 'user_schoolclass');
             if (sizeof($classes) > 0){
                 $query = "SELECT * FROM schoolclasses WHERE ";
                 foreach ($classes as $key => $s_class) {
-                    $query .= "id=" . $s_class['id_schoolclasses'];
+                    $query .= "id=" . $s_class['id_schoolclass'];
                     if ($key < sizeof($classes) - 1){
                         $query .= " OR ";
                     }
@@ -31,12 +31,6 @@ class SchoolClassController extends CrudController
             return [];
         }
         return $model->all($conditions);
-    }
-
-    public function delete($c, $request)
-    {
-        //parent::deleteAnotherTable($c, ['id_schoolclasses' => $request->query->get('id')], 'users_schoolclasses');
-        return parent::delete($c, $request);
     }
 
 }

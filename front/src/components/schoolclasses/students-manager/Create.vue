@@ -48,7 +48,7 @@ export default {
         submit() {            
             let dataOrganized = {
                 'id_student': this.student.split(" ")[0],
-                'id_schoolclasses': this.$route.params.id,
+                'id_schoolclass': this.$route.params.id,
             }
             this.dialog = false;
             this.$refs.form.reset();

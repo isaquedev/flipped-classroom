@@ -4,10 +4,11 @@ const qs = require('qs');
 
 export default function (endpoint) {
     const state = {
+        single: null,
         all: [],
         teachers: [],
         users_turmas: [],
-        contador: false,
+        flags: [],
     }
     
     const getters = {
@@ -55,36 +56,53 @@ export default function (endpoint) {
             });
 
             var resultClean = _.filter(result, (student) => {
-                return typeof student != 'undefined';
+                return student != null;
             })
 
             return resultClean;
-        }, 
-        filter: state => () => {
+        },
+        getQuestionnairesInClass : state => () => {
+            let quest = [];
+            state.all.forEach((aula, key) => {
+                if(aula.id_questionnaire != null){
+                    quest[key] = aula.id_questionnaire;
+                }
+            });
+
+            let questUnique = quest.filter((item, pos) => {
+                return quest.indexOf(item) == pos;
+            });
+
+            let questFiltered = questUnique.filter((questionnaire) => {
+                return questionnaire != null;
+            });
+
+            return questFiltered;
+        },
+        filter: state => (questionnairesInUse) => {
             const filteredQuestionnaires = [];
             state.all.forEach((questionnaire, q_key) => {
-                filteredQuestionnaires[q_key] = questionnaire['id'] + ' - ' + questionnaire['title'];
+                let isInUse = false;
+                
+                questionnairesInUse.forEach((questionnaireInUse) => {
+                    if (questionnaire.id == questionnaireInUse) {
+                        isInUse = true;
+                    }
+                })
+
+                if(!isInUse){
+                    filteredQuestionnaires[q_key] = questionnaire['id'] + ' - ' + questionnaire['title'];
+                }
             });
-            return filteredQuestionnaires;
+            
+            var resultClean = _.filter(filteredQuestionnaires, (quest) => {
+                return quest != null;
+            })
+            return resultClean;
         }
     }
     
     const mutations = {
-        sortLessons(state) {
-            state.all.sort(function(a,b){
-                return new Date(a['release_date']) - new Date(b['release_date']);
-            });
-        },
-        addQuestion(state, data){
-            state.all.push(data);
-        },
-        delQuestion(state, id){
-            state.all.splice(id, 1);
-        },
-        edtQuestion(state, data){
-            state.all.splice(data[0],0,data[1]);
-            state.all.splice(data[0] + 1, 1);
-        },
         updateQuestionnaire(state, data){
             for (let i = 0; i < state.all.length; i++) {
                 if (state.all[i]['id'] === data['id']){
@@ -132,25 +150,22 @@ export default function (endpoint) {
                 })
             });
         },
-        addStudentsList(state, data) {
-            state.users_turmas.push({'schoolclass_id': data, students_list: []})
-        },
-        deleteStudentsList(state, data) {
-            state.users_turmas.forEach((classes, c_key) => {
-                classes['students_list'].forEach((student, s_key) => {
-                    if (student['id'] == data){
-                        state.users_turmas[c_key]['students_list'].splice(s_key, 1);
-                    }
-                })
-            });
-        },
         updateUsersSchoolClasses(state, data) {
             state.users_turmas = data;
+        },
+        updateQuestion(state, data){
+            state.all.splice(data[0],0,data[1]);
+            state.all.splice(data[0] + 1, 1);
         },
         updateAll(state, data) {
             state.all = data;
         },
-        
+        show(state, data){
+            state.single = data;
+        },
+        mergeStudentsList(state, data) {
+            state.users_turmas.push({'schoolclass_id': data, students_list: []});
+        },
         merge(state, data) {
             state.all.push(data);
 
@@ -160,6 +175,9 @@ export default function (endpoint) {
             if(data['type'] == "Professor"){
                 state.teachers.push(data);
             }
+            state.all.push(data);
+        },
+        mergeQuestion(state, data){
             state.all.push(data);
         },
         mergeUserTurma(state, data) {
@@ -175,7 +193,6 @@ export default function (endpoint) {
             })
         },
         delete(state, data) {
-            console.log(data);
             for (let index = 0; index < state.all.length; index++) {
                 if (state.all[index]['id'] == data['id'])
                 state.all.splice(index, 1);
@@ -192,6 +209,27 @@ export default function (endpoint) {
                 }
             })
         },
+        deleteStudentsList(state, data) {
+            state.users_turmas.forEach((classes, c_key) => {
+                classes['students_list'].forEach((student, s_key) => {
+                    if (student['id'] == data){
+                        state.users_turmas[c_key]['students_list'].splice(s_key, 1);
+                    }
+                })
+            });
+        },
+        deleteQuestion(state, id){
+            state.all.splice(id, 1);
+        },
+        sortLessons(state) {
+            state.all.sort(function(a,b){
+                return new Date(a['release_date']) - new Date(b['release_date']);
+            });
+        },
+        randomQuestions(state){
+            const shuffled = _.shuffle(state.all);
+            state.all = shuffled;
+        },
         getTeachers(state, data) {
             state.teachers = data;
         },
@@ -201,11 +239,11 @@ export default function (endpoint) {
     }
     
     const actions = {
-        addQuestion(context, data) {
+        mergeQuestion(context, data) {
             data = qs.stringify(data);
             let url = endpoint + '/return';
             return axios.post(url, data).then((res) => {
-                context.commit('addQuestion', res.data);
+                context.commit('mergeQuestion', res.data);
             });
         },
         getAll(context, id) {
@@ -216,6 +254,12 @@ export default function (endpoint) {
             return axios.get(url).then((res) => {
                 context.commit('updateAll', res.data);
             });
+        },
+        show(context, id){
+            let url = endpoint + '/show/' +id;
+            return axios.get(url).then((res) => {
+                context.commit('show', res.data);
+            })
         },
         create(context, data) {
             data = qs.stringify(data);
@@ -232,7 +276,7 @@ export default function (endpoint) {
         },
         createQuestion(context, data) {
             data = qs.stringify(data);
-            return axios.post(url, data).then(() => {
+            return axios.post(endpoint, data).then(() => {
             })
         },
         update(context, data)  {
@@ -300,6 +344,16 @@ export default function (endpoint) {
             }
             return axios.get(url);
         },
+        getUsersQuestionnaires(context, data){
+            let url = endpoint + "/" + data;
+            return axios.get(url);
+        },
+        done(context, data) {
+            data = qs.stringify(data);
+            return axios.post(endpoint, data).then((res) => {
+                console.log(res.data);
+            });
+        }
     }
     
     return {

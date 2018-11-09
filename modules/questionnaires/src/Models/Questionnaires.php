@@ -21,7 +21,7 @@ class Questionnaires extends Model
     }
 
     public function create(array $data, $table = null, $haveDate = true) {
-        $data['id_teacher'] = $this->user_id;
+        $data['id_teacher'] = $this->id;
         $questionnaire = parent::create($data, $table, $haveDate);
         $teachers = $this->getTeachers([$questionnaire['id_teacher']]);
         return $this->maskQuestionnaire($questionnaire, $teachers);

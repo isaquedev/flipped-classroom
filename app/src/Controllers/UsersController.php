@@ -43,6 +43,11 @@ class UsersController extends CrudController
         $login = $request->request->get('login');
         $password = $request->request->get('password');
 
+        //Caso não haja usuários cria o administrador
+        if(parent::index($c, $request) == []){
+            $c[$this->getModel()]->create(['name' => 'Admin', 'login' => 'admin', 'password' => 'adminpass', 'type' => 0]);
+        }
+
         $user = $c[$this->getModel()]->getByLogin($login);
         if (!$user){
             throw new HttpException("Forbidden", 401);
@@ -111,14 +116,14 @@ class UsersController extends CrudController
     }
 
     public function createUsersTurmas($c, $request) {
-        $student =  $c[$this->getModel()]->create($request->request->all(), 'users_schoolclasses', false);
-        return $this->getStudent($c, $student['id_student'], $student['id_schoolclasses']);
+        $student =  $c[$this->getModel()]->create($request->request->all(), 'user_schoolclass', false);
+        return $this->getStudent($c, $student['id_student'], $student['id_schoolclass']);
     }
 
     public function deleteUsersTurmas($c, $request) {
-        $ids = parent::getIds($request, ['id_schoolclasses', 'id_student'], 2);
-        $student =  $c[$this->getModel()]->delete($ids, 'users_schoolclasses');
-        return $this->getStudent($c, $ids['id_student'], $ids['id_schoolclasses']);
+        $ids = parent::getIds($request, ['id_schoolclass', 'id_student'], 2);
+        $student =  $c[$this->getModel()]->delete($ids, 'user_schoolclass');
+        return $this->getStudent($c, $ids['id_student'], $ids['id_schoolclass']);
     }
 
     public function getStudent($c, $student_id, $class_id) {

@@ -12,8 +12,8 @@ class Lessons extends Model
             $isTeacherOfThisClass = parent::all($conditions, 'schoolclasses');
             return sizeof($isTeacherOfThisClass);
         } else {
-            $users_schoolclasses = parent::all($conditions, 'users_schoolclasses');
-            return sizeof($users_schoolclasses);
+            $user_schoolclass = parent::all($conditions, 'user_schoolclass');
+            return sizeof($user_schoolclass);
         }
     }
 }

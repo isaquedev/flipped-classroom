@@ -1,5 +1,7 @@
 -- MySQL Workbench Forward Engineering
 
+DROP DATABASE `heroku_1bb70b6ea823f68`;
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
@@ -50,20 +52,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `users_schoolclasses`
+-- Table `user_schoolclass`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `users_schoolclasses` (
+CREATE TABLE IF NOT EXISTS `user_schoolclass` (
   `id_student` INT UNSIGNED NOT NULL,
-  `id_schoolclasses` INT UNSIGNED NOT NULL,
-  INDEX `fk_users_schoolclasses_users_idx` (`id_student` ASC),
-  INDEX `fk_users_schoolclasses_schoolclasses_idx` (`id_schoolclasses` ASC),  
-  CONSTRAINT `fk_users_schoolclasses_users`
+  `id_schoolclass` INT UNSIGNED NOT NULL,
+  INDEX `fk_user_schoolclass_users_idx` (`id_student` ASC),
+  INDEX `fk_user_schoolclass_schoolclasses_idx` (`id_schoolclass` ASC),  
+  CONSTRAINT `fk_user_schoolclass_users`
     FOREIGN KEY (`id_student`)
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_users_schoolclasses_schoolclasses`
-    FOREIGN KEY (`id_schoolclasses`)
+  CONSTRAINT `fk_user_schoolclass_schoolclasses`
+    FOREIGN KEY (`id_schoolclass`)
     REFERENCES `schoolclasses` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -123,10 +125,13 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `users_questionnaires` (
   `id_student` INT UNSIGNED NOT NULL,
   `id_questionnaire` INT UNSIGNED NOT NULL,
-  `is_done` TINYINT(1) NOT NULL,
-  `grades` INT NOT NULL,
+  `id_schoolclass` INT UNSIGNED NOT NULL,
+  `questions_order` VARCHAR(190) NOT NULL,
+  `answers_order` VARCHAR(550) NOT NULL,
+  `student_answers_order` VARCHAR(100) NOT NULL,
   INDEX `fk_users_questionnaires_users_idx` (`id_student` ASC),
   INDEX `fk_users_questionnaires_questionnaires_idx` (`id_questionnaire` ASC),  
+  INDEX `fk_users_questionnaires_schoolclasses_idx` (`id_schoolclass` ASC),  
   CONSTRAINT `fk_users_questionnaires_users`
     FOREIGN KEY (`id_student`)
     REFERENCES `users` (`id`)
@@ -135,6 +140,11 @@ CREATE TABLE IF NOT EXISTS `users_questionnaires` (
   CONSTRAINT `fk_users_questionnaires_questionnaires`
     FOREIGN KEY (`id_questionnaire`)
     REFERENCES `questionnaires` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_users_questionnaires_schoolclasses`
+    FOREIGN KEY (`id_schoolclass`)
+    REFERENCES `schoolclasses` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
 )
@@ -145,19 +155,21 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lessons` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_schoolclass` INT UNSIGNED NOT NULL,
   `title` VARCHAR(50) NOT NULL,
-  `release_date` DATETIME NOT NULL,
-  `id_schoolclasses` INT UNSIGNED NOT NULL,
+  `description` VARCHAR(100) NOT NULL,
   `text_content` TEXT,
-  `video` VARCHAR(100),
   `id_questionnaire` INT UNSIGNED,
+  `video` VARCHAR(100),
+  `release_date` DATETIME NOT NULL,
+  `close_date` DATETIME,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_lessons_schoolclasses_idx` (`id_schoolclasses` ASC),
+  INDEX `fk_lessons_schoolclasses_idx` (`id_schoolclass` ASC),
   INDEX `fk_lessons_questionnaire_idx` (`id_questionnaire` ASC),
   CONSTRAINT `fk_lessons_schoolclasses`
-    FOREIGN KEY (`id_schoolclasses`)
+    FOREIGN KEY (`id_schoolclass`)
     REFERENCES `schoolclasses` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,

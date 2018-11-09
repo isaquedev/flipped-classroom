@@ -5,8 +5,8 @@
                 <v-expansion-panel >
                     <v-expansion-panel-content>
                         <div slot="header" >
-                            <v-icon @click="edtQuestion(question, key)">edit</v-icon>
-                            <v-icon @click="delQuestion(key)">delete</v-icon>
+                            <v-icon @click="updateQuestion(question, key)">edit</v-icon>
+                            <v-icon @click="deleteQuestion(key)">delete</v-icon>
                             <v-divider
                                 class="mx-3"
                                 vertical
@@ -151,11 +151,11 @@ export default {
         }
     },
     methods:{
-        delQuestion(id){
+        deleteQuestion(id){
             this.dialogDel = true;
             this.id = id;
         },
-        edtQuestion(question, id){
+        updateQuestion(question, id){
             this.dialogEdt = true;
             this.id = id;
             this.data = {
@@ -168,11 +168,11 @@ export default {
             };
         },
         submitDel(){
-            this.$store.commit('question/delQuestion', this.id);
+            this.$store.commit('question/deleteQuestion', this.id);
             this.dialogDel = false;
         },
         submitEdt() {
-            this.$store.commit('question/edtQuestion', [this.id, this.data]);
+            this.$store.commit('question/updateQuestion', [this.id, this.data]);
             this.dialogEdt = false;
         },
         cancelEdt() {

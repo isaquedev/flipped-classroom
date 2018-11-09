@@ -55,7 +55,7 @@
                 this.data.id_teacher = this.teacher.split(" ")[0];
                 this.$store.dispatch('schoolclasses/create', this.data).then((res) => {
                     let schoolclass = this.$store.state.schoolclasses.all;
-                    this.$store.commit('user/addStudentsList', schoolclass[schoolclass.length - 1]['id']);
+                    this.$store.commit('user/mergeStudentsList', schoolclass[schoolclass.length - 1]['id']);
                     this.$refs.form.reset();
                 });
             }

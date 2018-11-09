@@ -10,12 +10,14 @@ import './axios';
 import AsyncComputed from 'vue-async-computed'
 import store from './store';
 import VueYouTubeEmbed from 'vue-youtube-embed'
+var VueScrollTo = require('vue-scrollto');
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify);
 Vue.use(AsyncComputed);
 Vue.use(VueYouTubeEmbed)
+Vue.use(VueScrollTo)
 
 /* eslint-disable no-new */
 new Vue({

@@ -44,27 +44,36 @@
                     > 
                         delete
                     </v-icon>
+                    <v-icon
+                        small
+                        @click="showQuest(props.item.id)"
+                    > 
+                        remove_red_eye
+                    </v-icon>
                 </td>
             </template>
         </v-data-table>
 
         <delete-questionnaire/>
         <edit-questionnaire/>
+        <show-questionnaire/>
 
     </v-layout>
 </template>
 
 <script>
-import { eventHub } from '../../eventHub';
+import { eventHub }         from '../../eventHub';
 import CreateQuestionnaire  from './Create';
 import EditQuestionnaire    from './Edit';
-import DeleteQuestionnaire from './Delete';
+import DeleteQuestionnaire  from './Delete';
+import ShowQuestionnaire    from './Show';
 
 export default {
     components: {
         'create-questionnaire' : CreateQuestionnaire,
         'delete-questionnaire' : DeleteQuestionnaire,
         'edit-questionnaire': EditQuestionnaire,
+        'show-questionnaire': ShowQuestionnaire,
     },
     data() {
         return {
@@ -113,6 +122,9 @@ export default {
         },
         deleteQuest(questionnaire) {
             eventHub.$emit('questionnaire-delete', questionnaire);
+        },
+        showQuest(questionnaire) {
+            eventHub.$emit('questionnaire-show', questionnaire);
         },
     },
     mounted() {

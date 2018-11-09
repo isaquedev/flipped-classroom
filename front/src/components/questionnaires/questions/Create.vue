@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-expansion-panel v-model="addquestion" expand>
+        <v-expansion-panel v-model="mergeQuestion" expand>
             <v-expansion-panel-content>
                 <div slot="header" >Adicionar Questão</div>
                 <v-card>
@@ -61,7 +61,7 @@ export default {
         return {
             data: [],
             enunciation: null,
-            addquestion: [],
+            mergeQuestion: [],
             valid: false,
             validation: {
                     enunciation: [
@@ -87,12 +87,12 @@ export default {
     },
     methods: {
         cancelQuestion() {
-            this.addquestion = [false];
+            this.mergeQuestion = [false];
             this.$refs.form.reset();
         },
         submit(){
-            this.$store.dispatch('question/addQuestion', this.data).then((res) => {
-                this.addquestion = [false];
+            this.$store.dispatch('question/mergeQuestion', this.data).then((res) => {
+                this.mergeQuestion = [false];
                 this.$refs.formQuestion.reset();
             });
         }

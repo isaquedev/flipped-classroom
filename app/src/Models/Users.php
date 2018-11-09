@@ -30,8 +30,8 @@ class Users extends Model
 
     public function getUsersTurmas() {
         $query = "SELECT u.id AS student_id, u.name AS student_name, c.id AS schoolclass_id
-                  FROM users u, users_schoolclasses us, schoolclasses c
-                  WHERE u.id = us.id_student AND us.id_schoolclasses = c.id AND us.id_student <> c.id_teacher";
+                  FROM users u, user_schoolclass us, schoolclasses c
+                  WHERE u.id = us.id_student AND us.id_schoolclass = c.id AND us.id_student <> c.id_teacher";
 
         $students = parent::customQuery($query);
 
@@ -56,7 +56,7 @@ class Users extends Model
     }
 
     public function createUsersTurmas($data) {
-        $student =  parent::create($data, 'users_schoolclasses', false);
+        $student =  parent::create($data, 'user_schoolclass', false);
 
         $query = "SELECT name FROM users WHERE id=?";
         $bind = [$student['id_student']];

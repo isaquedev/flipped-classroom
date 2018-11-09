@@ -16,8 +16,8 @@ abstract class CrudController
 
     public function show($c, $request)
     {
-        $id = $request->attributes->get(1);
-        return $c[$this->getModel()]->get(['id' => $id]);
+        $id = $this->getId($request, 'id');
+        return $c[$this->getModel()]->get($id);
     }
 
     public function create($c, $request)
@@ -58,6 +58,14 @@ abstract class CrudController
         for ($i=0; $i < $qtes; $i++) { 
             $response[$key[$i]] = $url[sizeOf($url) - 1 - $i];
         }
+        return $response;
+    }
+
+    public function getQueryIds($request, $key){
+        $url = explode('/', $request->attributes->all()[0]);
+        $response = [];
+        $response[$key] = $url[sizeOf($url)-2];
+        $response['params'] = explode('&', $url[sizeOf($url)-1]);
         return $response;
     }
 

@@ -13,16 +13,19 @@
             </v-toolbar>
             <v-container>
                 <div v-html="lesson.text_content"></div>
-                <youtube v-if="videoId" :video-id="videoId"
+                <v-flex class="text-xs-center">
+                    <youtube v-if="videoId" :video-id="videoId"
                     @ended="videoEnd()"></youtube>
-                
+                </v-flex>
             </v-container>
         </v-card>
+        <questionnaire-show/>
     </v-dialog>
 </template>
 
 <script>
 import { eventHub } from '../../eventHub';
+import questionnaireShow from '../questionnaires/Show'
 
 export default {
     data() {
@@ -34,6 +37,9 @@ export default {
             blockQuestionnaire: true,
         }
     },
+    components:{
+        'questionnaire-show': questionnaireShow,
+    },
     created() {
         eventHub.$on('show-lesson', (id, lesson) => {
             this.dialog = true;
@@ -42,18 +48,27 @@ export default {
             this.loadVideo(lesson.video);
         })
     },
+    computed: {
+            user() {
+                return this.$store.state.auth.user;
+            },
+        },
     methods: {
         loadVideo(url){
-            if (url != null)
+            if (url != null){
+                this.blockQuestionnaire = true;
                 this.videoId = this.$youtube.getIdFromURL(url);
+            }
+            else
+                this.blockQuestionnaire = false;
         },
         close(){
             this.dialog = false;
             this.videoId = null;
         },
         videoEnd() {
-            blockQuestionnaire = false;
-        }
+            this.blockQuestionnaire = false;
+        },
     },
 
 }

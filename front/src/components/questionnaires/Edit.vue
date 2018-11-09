@@ -7,8 +7,7 @@
                 fab
                 bottom
                 right
-                color="amber"
-                :disabled="isDisabled()"
+                :color="isDisabled()"
                 @click="submit()"
                 mr-2
             ><v-icon>check</v-icon></v-btn>
@@ -103,19 +102,19 @@ export default {
     },
     methods: {
         submit() {
-            this.$store.dispatch('questionnaires/update', [this.id, this.data]).then((res) => {
-                this.$store.dispatch('question/update', [this.id, this.$store.state.question.all]).then(() =>{
-                    this.$store.commit('question/clean');
-                });
-            })
-            this.dialog = false;
-            this.formReset();
+            if(this.isDisabled() == "amber") {
+                this.$store.dispatch('questionnaires/update', [this.id, this.data]).then((res) => {
+                    this.$store.dispatch('question/update', [this.id, this.$store.state.question.all]).then(() =>{
+                        this.$store.commit('question/clean');
+                    });
+                })
+                this.dialog = false;
+                this.formReset();
+            }
         },
         isDisabled(){
-            if (this.valid && this.$store.state.question.all.length > 0){
-                return false;
-            }
-            return true;
+            return this.$store.state.question.all.length == 0 ? 
+                "grey" : this.valid && this.$store.state.question.all.length > 0 ? "amber" : "grey";
         },
         onCancel() {
             this.dialog = false;

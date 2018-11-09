@@ -8,7 +8,7 @@
                         <v-divider vertical class="mx-3"/>
                         <h2> {{ teacher.name }} </h2>
                         <v-spacer></v-spacer>
-                        <students-manager-list v-if="user.type==0"/>
+                        <students-manager-list v-if="user.type == 0"/>
                     </v-card-title>
                 </v-card>
             </v-flex>
