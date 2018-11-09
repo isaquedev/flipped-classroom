@@ -209,9 +209,7 @@ export default {
             this.questionnaire = [];
             this.questions = [];
             this.isLoading = true;
-            if(this.isDone){
-                eventHub.$emit('questionnaire-done');
-            }
+            eventHub.$emit('questionnaire-done');
         },
         submit(){
             if(this.isDisabled() == "amber"){
