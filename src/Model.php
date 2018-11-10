@@ -29,9 +29,13 @@ abstract class Model
         return $data;
     }
 
-    public function get(array $conditions)
+    public function get(array $conditions, $table = null)
     {
-        $query = $this->queryBuilder->select($this->table)
+        if($table == null){
+            $table = $this->table;
+        }
+
+        $query = $this->queryBuilder->select($table)
             ->where($conditions)
             ->getData();
 

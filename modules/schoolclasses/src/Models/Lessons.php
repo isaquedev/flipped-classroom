@@ -16,4 +16,17 @@ class Lessons extends Model
             return sizeof($user_schoolclass);
         }
     }
+
+    public function delete($conditions, $table = null) {
+        $lesson = parent::get($conditions);
+        $users_questionnaire_conditions = [
+            'id_schoolclass' => $lesson['id_schoolclass'],
+            'id_questionnaire' => $lesson['id_questionnaire'],
+        ];
+        $delQuest;
+        if ($users_questionnaire_conditions['id_questionnaire'] != null) {
+            $delQuest = parent::delete($users_questionnaire_conditions, 'users_questionnaires');
+        }
+        return parent::delete($conditions);
+    }
 }

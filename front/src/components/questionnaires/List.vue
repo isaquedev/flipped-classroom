@@ -29,7 +29,6 @@
                         <td >{{props.item.title}}</td>
                         <td >{{props.item.id_teacher}}</td>
                         <td >{{props.item.is_public}}</td>  
-                        <td >{{props.item.is_test}}</td>
                         <td class="text-xs-center">{{props.item.random_answers}}</td>
                     <td class="text-xs-left">
                     <v-icon
@@ -93,7 +92,6 @@ export default {
                 {text: 'Title', value: 'title'},
                 {text: 'Criador', value: 'id_teacher'},
                 {text: 'Público', value: 'public'},
-                {text: 'Prova', value: 'prova'},
                 {text: 'Sortear Perguntas', value: 'answers'},
                 {text: 'Ações', value: 'header', sortable: false}
             ],

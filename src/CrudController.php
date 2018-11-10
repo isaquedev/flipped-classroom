@@ -61,12 +61,4 @@ abstract class CrudController
         return $response;
     }
 
-    public function getQueryIds($request, $key){
-        $url = explode('/', $request->attributes->all()[0]);
-        $response = [];
-        $response[$key] = $url[sizeOf($url)-2];
-        $response['params'] = explode('&', $url[sizeOf($url)-1]);
-        return $response;
-    }
-
 }

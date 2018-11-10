@@ -38,22 +38,6 @@
                                             label="Público"
                                         ></v-switch>
                                         <v-switch
-                                            v-model="data.is_test"
-                                            label="Prova"
-                                        ></v-switch>
-                                        <div pl-4 row wrap v-if="data.is_test">
-                                            Duração
-                                            <v-text-field
-                                                shrink
-                                                style="width: 60px"
-                                                hint="Duração"
-                                                v-model="data.duration"
-                                                class="mt-0"
-                                                single-line
-                                                mask="time"
-                                            ></v-text-field>
-                                        </div>
-                                        <v-switch
                                             v-model="data.random_answers"
                                             label="Randomizar Perguntas"
                                         ></v-switch>
@@ -128,7 +112,6 @@ export default {
         },
         unMask(questionnaire, unMask){
             questionnaire['is_public']        = this.toBoolen(questionnaire['is_public'], unMask);
-            questionnaire['is_test']         = this.toBoolen(questionnaire['is_test'], unMask);
             questionnaire['random_answers']   = this.toBoolen(questionnaire['random_answers'], unMask);
             return questionnaire;
         },
@@ -145,8 +128,6 @@ export default {
             let tempQuestionnaire = {
                 title: questionnaire.title,
                 is_public: questionnaire.is_public,
-                is_test: questionnaire.is_test,
-                duration: questionnaire.duration,
                 random_answers: questionnaire.random_answers,
                 id_teacher: questionnaire.id_teacher
             };

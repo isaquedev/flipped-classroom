@@ -39,22 +39,6 @@
                                             label="Público"
                                         ></v-switch>
                                         <v-switch
-                                            v-model="data.is_test"
-                                            label="Prova"
-                                        ></v-switch>
-                                        <div pl-4 row wrap v-if="data.is_test">
-                                            Duração
-                                            <v-text-field
-                                                shrink
-                                                style="width: 60px"
-                                                hint="Duração"
-                                                v-model="data.duration"
-                                                class="mt-0"
-                                                single-line
-                                                mask="time"
-                                            ></v-text-field>
-                                        </div>
-                                        <v-switch
                                             v-model="data.random_answers"
                                             label="Randomizar Perguntas"
                                         ></v-switch>
@@ -90,8 +74,6 @@ export default {
             data: {
                 title: '',
                 is_public: false,
-                is_test: false,
-                duration: '0000',
                 random_answers: false,
             },
             hour: 0,
@@ -131,8 +113,6 @@ export default {
             this.data = {
                 title: '',
                 is_public: false,
-                is_test: false,
-                duration: '0000',
                 random_answers: false,
             };
         }

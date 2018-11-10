@@ -19,7 +19,7 @@ $router->add('PUT',     '/api/user',                '\App\Controllers\UsersContr
 $router->add('DELETE',  '/api/user/(\d)+',                '\App\Controllers\UsersController::delete');
 $router->add('GET',     '/api/users',               '\App\Controllers\UsersController::all');
 
-$router->add('GET',     '/api/teachers',            '\App\Controllers\UsersController::getTeachers');
+$router->add('GET',     '/api/user/(\d)+',            '\App\Controllers\UsersController::getByUserType');
 
 $router->add('GET',     '/api/user/turmas',         '\App\Controllers\UsersController::getUsersTurmas');
 $router->add('POST',    '/api/user/turmas',         '\App\Controllers\UsersController::createUsersTurmas');

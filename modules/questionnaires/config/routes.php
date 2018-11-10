@@ -12,4 +12,5 @@ $router->add('POST', '/api/question/return',    'UNI\Framework\Questionnaires\Co
 $router->add('PUT',  '/api/question',        'UNI\Framework\Questionnaires\Controllers\QuestionController::update');
 
 $router->add('GET',  '/api/users_questionnaires/(\d)+',  'UNI\Framework\Questionnaires\Controllers\UsersQuestionnairesController::get');
+$router->add('GET',  '/api/users_questionnaires/(\d)+/(\d)+',  'UNI\Framework\Questionnaires\Controllers\UsersQuestionnairesController::getByLesson');
 $router->add('POST', '/api/users_questionnaires',  'UNI\Framework\Questionnaires\Controllers\UsersQuestionnairesController::create');

@@ -53,7 +53,6 @@ class Questionnaires extends Model
     }
 
     public function maskQuestionnaire($questionnaire, $teachers, $toMask = true){
-        $questionnaire['is_test']         = $this->maskBoolean($questionnaire['is_test'], $toMask);
         $questionnaire['is_public']        = $this->maskBoolean($questionnaire['is_public'], $toMask);
         $questionnaire['random_answers']   = $this->maskBoolean($questionnaire['random_answers'], $toMask);
         foreach ($teachers as $teacher) {

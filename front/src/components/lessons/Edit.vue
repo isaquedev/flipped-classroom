@@ -1,5 +1,7 @@
 <template>
-    <v-card color="blue-grey lighten-5">
+    <div>
+        <v-dialog v-model="dialog" max-width="650">
+            <v-card color="blue-grey lighten-5">
         <v-card-title primary-title>
             <div class="headline">
                 Adicionar aula
@@ -92,62 +94,80 @@
             </v-form>
         </v-card-text>
     </v-card>
+        </v-dialog>
+    </div>
 </template>
 
 <script>
 import { VueEditor } from 'vue2-editor'
+import { eventHub } from '../../eventHub';
 
 export default {
-
     components: {
-        VueEditor
+        VueEditor,
     },
     computed: {
         questionnaires() {
-            return this.$store.getters['questionnaires/filter'](this.$store.getters['lessons/getQuestionnairesInClass']());
+            return this.$store.getters['questionnaires/filter'](this.$store.getters['lessons/getQuestionnairesInClass'](this.id_questionnaire));
         }
     },
     data() {
         return {
-            data: {},
+            dialog: false,
+            data: [],
             valid: false,
             datap: false,
             timep: false,
-            content: '',
             due_date: null,
             due_date_time: null,
             questionnaire: null,
+            id: null,
+            id_questionnaire: null,
             validation: {
-                title: [v => !!v || "Título é obrigatório"],
-                description: [v => !!v || "Descrição é obrigatório"],
-                date:  [v => !!v || "Data é obrigatório"],
-                date_time:  [v => !!v || "Hora é obrigatório"],
+                title:          [v => !!v || "Título é obrigatório"],
+                description:    [v => !!v || "Descrição é obrigatório"],
+                date:           [v => !!v || "Data é obrigatório"],
+                date_time:      [v => !!v || "Hora é obrigatório"],
+            }
         }
-    };
-  },
-  methods: {
-    submit() {
-      this.data.id_schoolclass = this.$route.params.id;
-      this.data.release_date = this.due_date + " " + this.due_date_time;
-      if (this.questionnaire != null){
-          this.data.id_questionnaire = this.questionnaire.split(" ")[0];
-      }
-      this.$store.dispatch("lessons/create", this.data).then(res => {
-        this.data.text_content = "";
-        this.$refs.form.reset();
-        this.$store.commit('lessons/sortLessons');
-      });
     },
-    resetDate(){
-        const date = new Date();
-        date.setDate(date.getDate());
-        this.due_date = date.toISOString().substr(0, 10);
-        date.setHours(date.getHours() - 2);
-        this.due_date_time = date.toISOString().substring(11,16);
+    methods: {
+        submit() {
+            this.data.id_schoolclass = this.$route.params.id;
+            this.data.release_date = this.due_date + " " + this.due_date_time;
+            if(this.questionnaire != null){
+                this.data.id_questionnaire = this.questionnaire.split(" ")[0];
+            }
+            this.dialog = false;
+            this.$store.dispatch("lessons/update", [this.id, this.data]).then(res => {
+                this.data.text_content = "";
+                this.$refs.form.reset();
+                this.$store.commit('lessons/sortLessons');
+            });
+        },
+    },
+    created() {
+        eventHub.$on('edit-lesson', (lesson) => {
+            this.dialog = true;
+            this.id = lesson.id;
+            this.id_questionnaire = lesson.id_questionnaire;
+
+            this.data.title = lesson.title;
+            this.data.description = lesson.description;
+            this.data.text_content = lesson.text_content;
+            this.data.video = lesson.video;
+
+            if (lesson.id_questionnaire != null){
+                this.questionnaires.forEach((quest, key) => {
+                    if (quest.split(" ")[0] = lesson.id_questionnaire){
+                        this.questionnaire = this.questionnaires[key];
+                    }
+                })
+            }
+
+            this.due_date = lesson.release_date.substr(0, 10);
+            this.due_date_time = lesson.release_date.substring(11,16);
+        });
     }
-  },
-  mounted() {
-      this.resetDate();
-  },
-};
+}
 </script>

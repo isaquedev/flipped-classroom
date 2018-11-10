@@ -101,9 +101,11 @@ class UsersController extends CrudController
         return $headers;
     }
 
-    public function getTeachers($c, $request)
+    public function getByUserType($c, $request)
     {
-        $teachers = $c[$this->getModel()]->allById("= 1");
+        $type_requested = parent::getId($request, 'type');
+        
+        $teachers = $c[$this->getModel()]->all($type_requested);
 
         for ($i=0; $i < sizeof($teachers); $i++) { 
             $teachers[$i] = $this->removeNotNecessaryData($teachers[$i], true);

@@ -61,10 +61,10 @@ export default function (endpoint) {
 
             return resultClean;
         },
-        getQuestionnairesInClass : state => () => {
+        getQuestionnairesInClass : state => (id) => {
             let quest = [];
             state.all.forEach((aula, key) => {
-                if(aula.id_questionnaire != null){
+                if(aula.id_questionnaire != null && aula.id_questionnaire != id){
                     quest[key] = aula.id_questionnaire;
                 }
             });
@@ -108,7 +108,6 @@ export default function (endpoint) {
                 if (state.all[i]['id'] === data['id']){
                     state.all[i]['title'] = data['title'];
                     state.all[i]['is_public'] = data['is_public'];
-                    state.all[i]['is_test'] = data['is_test'];
                     state.all[i]['random_answers'] = data['random_answers'];
                     break;
                 }
@@ -156,6 +155,19 @@ export default function (endpoint) {
         updateQuestion(state, data){
             state.all.splice(data[0],0,data[1]);
             state.all.splice(data[0] + 1, 1);
+        },
+        updateLesson(state, data){
+            for (let i = 0; i < state.all.length; i++) {
+                if (state.all[i]['id'] === data['id']){
+                    state.all[i]['title']           = data['title'];
+                    state.all[i]['description']     = data['description'];
+                    state.all[i]['text_content']    = data['text_content'];
+                    state.all[i]['id_questionnaire']= data['id_questionnaire'];
+                    state.all[i]['video']           = data['video'];
+                    state.all[i]['release_date']    = data['release_date'];
+                    break;
+                }
+            }
         },
         updateAll(state, data) {
             state.all = data;
@@ -293,6 +305,8 @@ export default function (endpoint) {
                     context.commit('updateQuestionnaire', res.data);
                 } else if(moduleName == 'question'){
                     context.commit('updateAll', updated);
+                } else if(moduleName == 'lessons'){
+                    context.commit('updateLesson', updated);
                 }
             })
         },
@@ -326,11 +340,15 @@ export default function (endpoint) {
             })
         },
         getTeachers(context) {
-            let url = '/api/teachers';
+            let url = endpoint + '/1';
             return axios.get(url).then((res) => {
                 context.commit('getTeachers', res.data);
             })
         }, 
+        getStudents(context) {
+            let url = endpoint + '/2';
+            return axios.get(url);
+        },
         getUsers(context) {
             let url = endpoint + 's';
             return axios.get(url).then((res) => {
@@ -346,6 +364,10 @@ export default function (endpoint) {
         },
         getUsersQuestionnaires(context, data){
             let url = endpoint + "/" + data;
+            return axios.get(url);
+        },
+        getUsersQuestionnairesByLesson(context, data){
+            let url = endpoint + "/" + data[0] + "/" + data[1];
             return axios.get(url);
         },
         done(context, data) {

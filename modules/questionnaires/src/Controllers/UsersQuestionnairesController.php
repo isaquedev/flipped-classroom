@@ -11,11 +11,26 @@ class UsersQuestionnairesController extends CrudController
         return 'users_questionnaires_model';
     }
 
+    public function getByLesson($c, $request){
+        $data = parent::getIds($request, ['id_lesson', 'id_schoolclass'], 2);
+        $lesson_id = $data['id_lesson'];
+        unset($data['id_lesson']);
+        $lesson = $c[$this->getModel()]->get(['id' => $lesson_id], 'lessons');
+        $data['id_questionnaire'] = $lesson['id_questionnaire'];
+        
+        $questionnairesResult = $c[$this->getModel()]->all($data, 'users_questionnaires');
+
+        foreach ($questionnairesResult as $key => $quest) {
+            $questionnairesResult[$key] = $this->unMaskUsersQuestionnaires($quest);
+        }
+
+        return $questionnairesResult;
+    }
+
     public function get($c, $request){
         $data = parent::getId($request, 'id_schoolclass');
         $data['id_student'] = $c[$this->getModel()]->id;
-        $questionnaires = $c[$this->getModel()]->get($data);
-        $result = [];
+        $questionnaires = $c[$this->getModel()]->all($data, 'users_questionnaires');
         foreach ($questionnaires as $key => $quest) {
             $questionnaires[$key] = $this->unMaskUsersQuestionnaires($quest);
         }
