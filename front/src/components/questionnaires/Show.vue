@@ -32,7 +32,7 @@
                             ></v-progress-circular>
                         </div>
                         <v-flex v-for="(cStududent, key) in concludedStudents" :key="cStududent.id">
-                            <div @click="openQuestById(key)" :class="selectedId == key ? 'grey lighten-5 pa-3' : 'pa-3'">
+                            <div @click="openQuestById(key)" :class="selectedId == key ? 'grey lighten-4 pa-3' : 'pa-3'">
                                 <div class="subheading">{{cStududent.name}}</div>
                                 <div :class="(getNotaByStudent(key)) >= 7 ? 
                                                 'green-text subheading mt-1 text-xs-center' :
