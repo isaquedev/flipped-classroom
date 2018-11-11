@@ -99,8 +99,6 @@
         data() {
             return {
                 type: 1,
-                getingAulas: false,
-                havePermission: false,
                 aulas: [],
                 isLoading: true,
                 isLoadingQuest: true,
@@ -126,47 +124,30 @@
         },
         mounted() {
             if (this.user.length != 0) {
-                this.getingAulas = false;
-                if (this.user.type == 0) {
-                    this.getAulas();
-                } else {
-                    this.getViewPermission();
-                }
-            }
-        },
-        beforeUpdate() {
-            if (this.user.length != 0) {
-                this.getingAulas = false;
-                if (this.user.type == 0) {
-                    this.getAulas();
-                } else {
-                    this.getViewPermission();
-                }
+                this.getViewPermission();
             }
         },
         watch: {
             turma: function (to, from) {    //Quando troco de uma turma para outra via url
-                if(to.id == null) {
+                if (to == null){
                     window.location = '/';
                 } else {
-                    this.getingAulas = false;
-                    this.getAulas();
+                    this.getViewPermission();
                 }
             },
         },
         methods: {
             getViewPermission() {
-                if (!this.havePermission){
-                    this.$store.dispatch('lessons/getClassViewPermission', this.$route.params.id)
+                this.aulas = [];
+                this.isLoading = true;
+                this.$store.dispatch('lessons/getClassViewPermission', this.$route.params.id)
                     .then((res) => {
                         if (res.data == 0) {
                             window.location = "/";
                         } else {
                             this.getAulas();
-                            this.havePermission = true;
                         }
                     });
-                }
             },
             isDonedQuest(id_quest){
                 let isDoned = false;
@@ -178,11 +159,11 @@
                 return isDoned;
             },
             getAulas() {
-                if (!this.getingAulas){
-                    this.$store.dispatch('lessons/getAll', this.$route.params.id).then(() => {
+                this.$store.dispatch('lessons/getAll', this.$route.params.id).then(() => {
                         this.$store.commit('lessons/sortLessons');
                         this.aulas = this.$store.state.lessons.all;
                         this.isLoading = false;
+                        this.isLoadingQuest = true;
                         if(this.user.type == 2){
                             this.$store.dispatch(
                                 'users_questionnaires/getUsersQuestionnaires', this.$route.params.id).then((res) => {
@@ -197,8 +178,6 @@
                         this.isLoading = false;
                         this.isLoadingQuest = false;
                     })
-                }
-                this.getingAulas = true;
             },
             show(aula, id){
                 eventHub.$emit('show-lesson', id, aula);
@@ -229,8 +208,8 @@
                             } else {
                                 this.questEmpty = true;
                             }
-                            
-                        })
+                        }
+                    )
                 }
                 
             },
