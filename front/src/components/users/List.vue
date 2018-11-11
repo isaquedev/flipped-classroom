@@ -86,17 +86,10 @@ export default {
             ],
         }
     },
-    asyncComputed: {
-        users: {
-            get() {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve(this.$store.state.user.all);
-                    }, 1000)
-                })
-            },
-            default: [],
-        },
+    computed: {
+        users() {
+            return this.$store.state.user.all;
+        }
     },
     watch: {
         users: function(to, from) {

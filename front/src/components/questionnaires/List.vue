@@ -97,16 +97,9 @@ export default {
             ],
         }
     },
-    asyncComputed: {
-        questionnaires: {
-            get() {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve(this.$store.state.questionnaires.all);
-                    }, 1000)
-                })
-            },
-            default: [],
+    computed: {
+        questionnaires() {
+            return this.$store.state.questionnaires.all;
         },
     },
     watch: {
