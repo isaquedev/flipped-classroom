@@ -35,19 +35,21 @@ export default {
     data() {
         return {
             dialog: false,
+            class_id: null,
             aluno: [],
         }
     },
     created() {
-        eventHub.$on('aluno-delete', (aluno) => {
+        eventHub.$on('aluno-delete', (aluno, class_id) => {
             this.dialog = true;
+            this.class_id = class_id;
             this.aluno = aluno;
         });
     },
     methods: {
         submit() {
             this.dialog = false;
-            this.$store.dispatch('user/deleteUsersTurmas', [this.aluno.id, this.$route.params.id]);
+            this.$store.dispatch('user/deleteUsersTurmas', [this.aluno.id, this.class_id]);
         }
     }
 }

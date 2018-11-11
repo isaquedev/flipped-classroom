@@ -99,6 +99,7 @@ export default {
     },
     computed: {
         questionnaires() {
+            this.isLoading = false;
             return this.$store.state.questionnaires.all;
         },
     },
@@ -119,6 +120,9 @@ export default {
         },
     },
     mounted() {
+        if (this.questionnaires.length > 0){
+            this.isLoading = false;
+        }
         setTimeout(() => {
             this.isLoading = false;
         }, 5000);

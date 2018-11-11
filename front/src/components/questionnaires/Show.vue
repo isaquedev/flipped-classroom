@@ -84,10 +84,12 @@
                                     <v-spacer></v-spacer>
                                 </v-card-title>
                                 <v-container>
-                                    <div v-html="question.enunciation" class="mb-3"></div>
+                                    <div v-html="question.enunciation" class="mb-3 title"></div>
                                     <div v-for="(answersObjs) in answersList[key]" :key="answersObjs.id">
                                         <v-radio-group v-for="(answer, a_key) in answersObjs" :key="answer.id" row v-model="isMarked[key]">
-                                            <div :class="getColor(answer.id, true)">{{getLetter(a_key)}}</div>&nbsp; <v-radio :color="getColor(answer.id,false)" :readonly="isDone" :value="answer.id"></v-radio> <div v-html="answer.text"></div>
+                                            <div :class="getColor(answer.id, true)">{{getLetter(a_key)}}</div>&nbsp;
+                                            <v-radio style="display: inline-block;" :color="getColor(answer.id,false)" :readonly="isDone" :value="answer.id"></v-radio>
+                                            <div v-html="answer.text">{{answer.text}}</div>
                                         </v-radio-group>
                                     </div>
                                 </v-container>

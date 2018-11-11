@@ -6,47 +6,37 @@
                 <v-card>
                     <v-card-text>
                         <v-form ref="formQuestion" v-model="valid">
-                            <v-textarea
-                                v-model="data.enunciation"
-                                label="Enunciado"
-                                required
-                                :rules="validation.enunciation"
-                            ></v-textarea>
-                            <v-textarea
-                                v-model="data.correct_answer"
-                                label="Resposta Certa"
-                                required
-                                :rules="validation.correct_answer"
-                            ></v-textarea>
-                            <v-textarea
-                                v-model="data.incorrect_answer1"
-                                label="Resposta Errada 1"
-                                required
-                                :rules="validation.incorrect_answer1"
-                            ></v-textarea>
-                            <v-textarea
-                                v-model="data.incorrect_answer2"
-                                label="Resposta Errada 2"
-                                required
-                                :rules="validation.incorrect_answer2"
-                            ></v-textarea>
-                            <v-textarea
-                                v-model="data.incorrect_answer3"
-                                label="Resposta Errada 3"
-                                required
-                                :rules="validation.incorrect_answer3"
-                            ></v-textarea>
-                            <v-textarea
-                                v-model="data.incorrect_answer4"
-                                label="Resposta Errada 4"
-                                required
-                                :rules="validation.incorrect_answer4"
-                            ></v-textarea>
+
+                            <div class="mb-2 subheading" >Enunciado:</div>
+
+                            <vue-editor v-model="data.enunciation"
+                            ></vue-editor>
+                            
+                            <div class="my-2 subheading" >Questão correta:</div>
+                            <vue-editor v-model="data.correct_answer"
+                            ></vue-editor>
+
+                            <div class="my-2 subheading" >Questão incorreta:</div>
+                            <vue-editor v-model="data.incorrect_answer1"
+                            ></vue-editor>
+
+                            <div class="my-2 subheading" >Questão incorreta:</div>
+                            <vue-editor v-model="data.incorrect_answer2"
+                            ></vue-editor>
+
+                            <div class="my-2 subheading" >Questão incorreta:</div>
+                            <vue-editor v-model="data.incorrect_answer3"
+                            ></vue-editor>
+
+                            <div class="my-2 subheading" >Questão incorreta:</div>
+                            <vue-editor v-model="data.incorrect_answer4"
+                            ></vue-editor>
+
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn flat @click="cancelQuestion()">Cancelar</v-btn>
-                        <v-btn flat :disabled="!valid" @click="submit()">Salvar</v-btn>
+                        <v-btn flat :disabled="!isValid()" @click="submit()">Salvar</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-expansion-panel-content>
@@ -56,45 +46,46 @@
 
 
 <script>
+import { VueEditor } from 'vue2-editor'
+
 export default {
+    components: {
+        VueEditor,
+    },
     data() {
         return {
             data: [],
             enunciation: null,
             mergeQuestion: [],
             valid: false,
-            validation: {
-                    enunciation: [
-                        v => !!v || 'Enunciado é obrigatório'
-                    ],
-                    correct_answer: [
-                        v => !!v || 'Questão correta é obrigatório'
-                    ],
-                    incorrect_answer1: [
-                        v => !!v || 'Questão incorreta é obrigatório'
-                    ],
-                    incorrect_answer2: [
-                        v => !!v || 'Questão incorreta é obrigatório'
-                    ],
-                    incorrect_answer3: [
-                        v => !!v || 'Questão incorreta é obrigatório'
-                    ],
-                    incorrect_answer4: [
-                        v => !!v || 'Questão incorreta é obrigatório'
-                    ],
-            },
         }
     },
     methods: {
         cancelQuestion() {
-            this.mergeQuestion = [false];
-            this.$refs.form.reset();
+            this.resetForm();
         },
         submit(){
-            this.$store.dispatch('question/mergeQuestion', this.data).then((res) => {
-                this.mergeQuestion = [false];
-                this.$refs.formQuestion.reset();
-            });
+            this.$store.dispatch('question/mergeQuestion', this.data).then(() => {
+                this.resetForm();
+            })
+        },
+        isValid(){
+            return this.data.enunciation
+                && this.data.correct_answer 
+                && this.data.incorrect_answer1
+                && this.data.incorrect_answer2
+                && this.data.incorrect_answer3
+                && this.data.incorrect_answer4;
+        },
+        resetForm(){
+            this.mergeQuestion = [false];
+            this.data.enunciation
+                = this.data.correct_answer 
+                = this.data.incorrect_answer1
+                = this.data.incorrect_answer2
+                = this.data.incorrect_answer3
+                = this.data.incorrect_answer4
+                = null;
         }
     },
 }

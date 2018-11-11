@@ -29,6 +29,9 @@
 import { eventHub } from '../../../eventHub';
 
 export default {
+    props: [
+        'class_id',
+    ],
     data() {
         return {
             dialog: false,
@@ -48,7 +51,7 @@ export default {
         submit() {            
             let dataOrganized = {
                 'id_student': this.student.split(" ")[0],
-                'id_schoolclass': this.$route.params.id,
+                'id_schoolclass': this.class_id,
             }
             this.dialog = false;
             this.$refs.form.reset();
@@ -58,7 +61,7 @@ export default {
             });
         },
         getOthersStudents() {
-            this.students = this.$store.getters['user/byNotClassId'](this.$route.params.id);
+            this.students = this.$store.getters['user/byNotClassId'](this.class_id);
         }
     },
 }

@@ -88,6 +88,9 @@
                 </v-menu>
 
                 <v-btn
+                    @click="dialog = false"
+                >Cancelar</v-btn>
+                <v-btn
                     :disabled="!valid"
                     @click="submit"
                 >Salvar</v-btn>

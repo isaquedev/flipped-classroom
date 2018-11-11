@@ -41,9 +41,7 @@ export default {
   methods: {
     async getAdminData() {
       await this.$store.dispatch('user/getUsers');
-      await this.$store.dispatch('user/getUsersTurmas').then(() => {
-        eventHub.$emit('users-turmas-getted');
-      });
+      await this.$store.dispatch('user/getUsersTurmas');
     }
   }
 }

@@ -1,10 +1,9 @@
 <template>
  <v-dialog
         v-model="dialog"
-        fullscreen
+        max-width="550"
         scrollable
     >
-    <v-btn slot="activator" color="amber" dark class="mb-2 black--text">Gerenciar Alunos</v-btn>
         <v-card>
             <v-toolbar card color="amber" class="elevation-2">
                 <v-btn icon @click.native="dialog = false">
@@ -12,9 +11,9 @@
                 </v-btn>
                 <v-toolbar-title> Gerenciador de Alunos </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <create-student/>
+                <create-student :class_id="class_id"/>
             </v-toolbar>
-    <v-layout column>
+                <v-layout column>
                     <v-data-table
                         :headers="headers"
                         :items="usersTurmas"
@@ -58,6 +57,7 @@ export default {
     },
     data() {
         return {
+            class_id: null,
             isLoading: true,
             dialog: false,
             pagination: {
@@ -79,12 +79,12 @@ export default {
     },
     computed: {
         usersTurmas(){
-            return this.$store.getters['user/byClassId'](this.$route.params.id);
+            return this.$store.getters['user/byClassId'](this.class_id);
         },
     },
     methods: {
         deleteUser(aluno) {
-            eventHub.$emit('aluno-delete', aluno);
+            eventHub.$emit('aluno-delete', aluno, this.class_id);
         },
     },
     mounted() {
@@ -93,8 +93,11 @@ export default {
         }, 5000);
     },
     created() {
-        eventHub.$on('users-turmas-getted', () => {
-            this.usersTurmas = this.$store.getters['user/byClassId'](this.$route.params.id);
+        eventHub.$on('users-turmas-getted', (id) => {
+            console.log('work');
+            this.dialog = true;
+            this.class_id = id;
+            this.usersTurmas = this.$store.getters['user/byClassId'](id);
             this.isLoading = false;
         });
     },

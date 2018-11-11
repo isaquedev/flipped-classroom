@@ -1,12 +1,14 @@
 <template>
     <v-layout id="lessons-container" column>
-        <v-flex class="text-xs-center"><v-progress-circular
-                    v-if="isLoading"
-                    :size="50"
-                    color="amber"
-                    indeterminate
-                    class="my-2"
-                ></v-progress-circular></v-flex>
+        <v-flex class="text-xs-center">
+            <v-progress-circular
+                v-if="isLoading"
+                :size="50"
+                color="amber"
+                indeterminate
+                class="my-2"
+            ></v-progress-circular>
+        </v-flex>
         <v-flex xs12 v-for="(aula, key) in aulas" :key="aula.id">
             <v-card color="blue-grey lighten-5">
                 <v-card-title primary-title class="blue-grey white--text">
@@ -86,6 +88,7 @@
     import edit from './Edit';
     import lDelete from './Delete';
     import { eventHub } from '../../eventHub';
+    import { VueEditor } from 'vue2-editor'
 
     export default {
         props: [
@@ -107,6 +110,7 @@
             }
         },
         components: {
+            VueEditor,
             create,
             show,
             edit,
