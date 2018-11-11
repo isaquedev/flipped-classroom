@@ -79,11 +79,7 @@ export default {
     },
     computed: {
         usersTurmas(){
-            if (this.$store.state.user.users_turmas.length != 0){
-                this.isLoading = false;
-                return this.$store.getters['user/byClassId'](this.$route.params.id);
-            }
-            return [];
+            return this.$store.getters['user/byClassId'](this.$route.params.id);
         },
     },
     methods: {
