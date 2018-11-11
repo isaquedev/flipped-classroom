@@ -19,7 +19,7 @@
                         <div class="headline elevation-1 blue-grey white--text text-xs-center pa-2">
                             Alunos
                         </div>
-                    <v-div color="blue-grey lighten-5">
+                    <div color="blue-grey lighten-5">
                         <div class="title py-3 text-xs-center">Concluiram</div>
                         <v-divider/>
                         <div class="text-xs-center">
@@ -62,7 +62,7 @@
                             </div>
                             <v-divider class="ma-2"/>
                         </v-flex>
-                    </v-div>
+                    </div>
                     </v-card>
                 </v-flex>
                 <v-divider vertical class="my-2"/>
