@@ -16,7 +16,7 @@ $router->add('GET',     '/api/me', function($c) {
 
 $router->add('POST',    '/api/user',                '\App\Controllers\UsersController::create');
 $router->add('PUT',     '/api/user',                '\App\Controllers\UsersController::update');
-$router->add('DELETE',  '/api/user/(\d)+',                '\App\Controllers\UsersController::delete');
+$router->add('DELETE',  '/api/user/(\d)+',           '\App\Controllers\UsersController::delete');
 $router->add('GET',     '/api/users',               '\App\Controllers\UsersController::all');
 
 $router->add('GET',     '/api/user/(\d)+',            '\App\Controllers\UsersController::getByUserType');

@@ -16,8 +16,10 @@ class Users extends Model
         return parent::get(['login' => $login]);
     }
 
-    public function allById($conditions) {
-        $users = parent::all($conditions);
+    public function allUsers() {
+        $query = "SELECT * FROM users WHERE type <> 0";
+
+        $users = parent::customQuery($query);
 
         foreach ($users as $key => $user) {
             $users[$key]['type'] = $user['type'] == 1 ? 'Professor' : 'Aluno';

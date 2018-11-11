@@ -15,7 +15,7 @@ class UsersController extends CrudController
     }
 
     public function all($c) {
-        return $this->removeNotNecessaryData($c[$this->getModel()]->allById("<> 0"));
+        return $this->removeNotNecessaryData($c[$this->getModel()]->allUsers());
     }
 
     public function create($c, $request)
