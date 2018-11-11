@@ -40,20 +40,17 @@
 
     <v-toolbar app clipped-left color="amber">
         <v-toolbar-side-icon @click.prevent="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>Sistema de Gestão Educacional</v-toolbar-title>
+        <v-toolbar-title>
+            Sistema de Gestão Educacional
+        </v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-toolbar-title class="subheading mr-3">
+            {{user.name}}
+        </v-toolbar-title>
         <v-toolbar-items>
-            <v-menu offset-y>
-                <v-btn slot="activator" flat>{{user.name}}<v-icon>keyboard_arrow_down</v-icon></v-btn>                
-                <v-list>
-                    <v-list-tile min-height="100">
-                        <v-btn flat>Perfil</v-btn>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-btn flat  @click="logout()">Sair</v-btn>
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
+            <v-btn color="blue-grey white--text" @click="logout()">
+                Sair<v-icon medium color="white" class="ml-2">exit_to_app</v-icon>
+            </v-btn>
         </v-toolbar-items>
     </v-toolbar>
     </div>
