@@ -38,12 +38,12 @@ class UsersQuestionnairesController extends CrudController
     }
 
     public function create($c, $request){
-        $data = $this->maskUsersQuestionaires($c, $request);
+        $data = $this->maskUsersQuestionnaires($c, $request);
         $users_questionnaires = $c[$this->getModel()]->done($data, null, false);
         return $this->unMaskUsersQuestionnaires($users_questionnaires);
     }
 
-    public function maskUsersQuestionaires($c, $request){
+    private function maskUsersQuestionnaires($c, $request){
         $answers_order =  $request->request->get(3);
         $answers_orderImploded = "";
         for ($i=0; $i < sizeOf($answers_order); $i++) { 
@@ -62,7 +62,7 @@ class UsersQuestionnairesController extends CrudController
         return $data;
     }
 
-    public function unMaskUsersQuestionnaires($data){
+    private function unMaskUsersQuestionnaires($data){
         $data['questions_order'] = explode(",", $data['questions_order']);
         
         $answers_order = explode("-", $data['answers_order']);

@@ -4,7 +4,7 @@ namespace UNI\Framework\SchoolClasses;
 
 use UNI\Framework\Modules\Contract;
 
-class SchoolClassModule implements Contract
+class SchoolClassesModule implements Contract
 {
     public function getNamespaces() :array
     {

@@ -4,7 +4,7 @@ namespace UNI\Framework\Questionnaires;
 
 use UNI\Framework\Modules\Contract;
 
-class QuestionnaireModule implements Contract
+class QuestionnairesModule implements Contract
 {
     public function getNamespaces() :array
     {
