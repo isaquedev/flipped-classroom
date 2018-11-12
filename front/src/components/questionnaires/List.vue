@@ -11,7 +11,7 @@
                 <v-spacer></v-spacer>
 
                 <create-questionnaire/>
-                
+
                 </v-toolbar>
                     <v-data-table
                         :headers="headers"
@@ -40,6 +40,7 @@
                     </v-icon>
                     <v-icon
                         small
+                        v-if="isCreator(props.item.id_teacher)"
                         @click="deleteQuest(props.item.id)"
                     > 
                         delete
