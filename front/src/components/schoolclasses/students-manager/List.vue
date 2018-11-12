@@ -60,6 +60,7 @@ export default {
             class_id: null,
             isLoading: true,
             dialog: false,
+            usersTurmas: [],
             pagination: {
                 page: 1,
                 rowsPerPage: 10,
@@ -77,11 +78,6 @@ export default {
             ],
         }
     },
-    computed: {
-        usersTurmas(){
-            return this.$store.getters['user/byClassId'](this.class_id);
-        },
-    },
     methods: {
         deleteUser(aluno) {
             eventHub.$emit('aluno-delete', aluno, this.class_id);
@@ -94,7 +90,6 @@ export default {
     },
     created() {
         eventHub.$on('users-turmas-getted', (id) => {
-            console.log('work');
             this.dialog = true;
             this.class_id = id;
             this.usersTurmas = this.$store.getters['user/byClassId'](id);

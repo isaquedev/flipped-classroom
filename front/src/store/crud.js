@@ -27,6 +27,7 @@ export default function (endpoint) {
             return data || {};
         },
         byClassId: state => (classId) => {
+            console.log(classId);
             //Rodar usersturmas para pegar os alunos de lá
             //fazer parte do backend para adiconar aluno ao users_turmas;
             const request_class = _.find(state.users_turmas, (_class) => {
