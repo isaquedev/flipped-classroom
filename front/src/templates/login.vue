@@ -5,8 +5,8 @@
                 <v-layout align-center justify-center>
                     <v-flex xs12 sm8 md4>
                         <v-card class="elevation-12">
-                            <v-toolbar dark color="primary">
-                                <v-toolbar-title>Login</v-toolbar-title>
+                            <v-toolbar color="amber">
+                                <v-toolbar-title>Sistema Educacional</v-toolbar-title>
                                 <v-spacer></v-spacer>
                             </v-toolbar>
                             <v-card-text>
@@ -18,6 +18,7 @@
                                         v-model="data.login"
                                         prepend-icon="person"                                        
                                         label="Email"
+                                        color="amber"
                                         :rules="validation.login"
                                         required
                                     ></v-text-field>
@@ -26,6 +27,7 @@
                                         prepend-icon="lock"
                                         label="Senha"
                                         type="password"
+                                        color="amber"
                                         :rules="validation.password"
                                         required
                                     ></v-text-field>
@@ -36,7 +38,7 @@
                                 <v-btn
                                     :disabled="!valid"
                                     @click="submit()"
-                                    color="primary"
+                                    color="amber"
                                 >Entrar</v-btn>
                             </v-card-actions>
                         </v-card>

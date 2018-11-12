@@ -6,9 +6,9 @@
         <router-view/>
       </v-container>
     </v-content>
-    <v-footer app>
-      <span>&copy; <a href="https://unicarioca.edu.br">Unicarioca</a> - {{year}}</span>
-    </v-footer>
+    <!--v-footer app>
+      <span>&copy; <a href="link">Text</a> - {{year}}</span>
+    </v-footer-->
   </v-app>
 </template>
 

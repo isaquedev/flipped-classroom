@@ -9,7 +9,7 @@
                 <v-btn icon @click.native="dialog = false">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title> Gerenciador de Alunos </v-toolbar-title>
+                <v-toolbar-title> Alunos </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <create-student :class_id="class_id"/>
             </v-toolbar>

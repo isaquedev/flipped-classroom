@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-dialog v-model="dialog" max-width="400px">
-                    <v-btn slot="activator" color="amber" dark class="mb-2 black--text">Novo Usuário</v-btn>
+                    <v-btn slot="activator" color="amber" dark class="mb-2 black--text">Adicionar Usuário</v-btn>
                     <v-card color="blue-grey lighten-4">
                         <v-card-title class="headline"> Adicionar Usuário </v-card-title>
                         <v-container>
@@ -21,7 +21,7 @@
                                 <v-text-field
                                     v-model="data.password"
                                     :rules="validation.password"
-                                    label="Password"
+                                    label="Senha"
                                     required
                                 ></v-text-field>
                                 <v-autocomplete

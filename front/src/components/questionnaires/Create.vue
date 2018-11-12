@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-dialog v-model="dialog" fullscreen>
-            <v-btn slot="activator" color="amber" dark class="mb-2 black--text">Criar Questionário</v-btn>
+            <v-btn slot="activator" color="amber" dark class="mb-2 black--text">Adicionar Questionário</v-btn>
             <v-btn
                 fixed
                 dark
@@ -17,7 +17,7 @@
                     <v-btn icon @click.native="onCancel()">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title> Criar Questionário </v-toolbar-title>
+                    <v-toolbar-title> Adicionar Questionário </v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-layout column>
@@ -26,7 +26,7 @@
                             <v-text-field
                                 v-model="data.title"
                                 :rules="validation.title"
-                                label="Title"
+                                label="Título"
                                 required
                             ></v-text-field>
                             <v-expansion-panel>
@@ -40,7 +40,7 @@
                                         ></v-switch>
                                         <v-switch
                                             v-model="data.random_answers"
-                                            label="Randomizar Perguntas"
+                                            label="Aleatorizar Perguntas"
                                         ></v-switch>
                                         </v-card-text>
                                     </v-card>

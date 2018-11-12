@@ -1,10 +1,10 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" max-width="650">
+        <v-dialog v-model="dialog" max-width="1000">
             <v-card color="blue-grey lighten-5">
         <v-card-title primary-title>
             <div class="headline">
-                Adicionar aula
+                Editar aula
             </div>
         </v-card-title>
         <v-card-text>

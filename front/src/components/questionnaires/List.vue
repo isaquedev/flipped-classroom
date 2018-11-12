@@ -47,7 +47,7 @@
                     </v-icon>
                     <v-icon
                         small
-                        @click="showQuest(props.item.id)"
+                        @click="showQuest(props.item.id, props.item.title)"
                     > 
                         remove_red_eye
                     </v-icon>
@@ -91,7 +91,7 @@ export default {
                     value: 'header'
                 },
                 {text: 'ID', value: 'id'},
-                {text: 'Title', value: 'title'},
+                {text: 'Título', value: 'title'},
                 {text: 'Criador', value: 'id_teacher'},
                 {text: 'Público', value: 'public'},
                 {text: 'Sortear Perguntas', value: 'answers'},
@@ -117,8 +117,8 @@ export default {
         editQuest(questionnaire) {
             eventHub.$emit('questionnaire-edit', questionnaire);
         },
-        deleteQuest(questionnaire) {
-            eventHub.$emit('questionnaire-delete', questionnaire);
+        deleteQuest(id, title) {
+            eventHub.$emit('questionnaire-delete', id, title);
         },
         showQuest(questionnaire) {
             eventHub.$emit('questionnaire-show', questionnaire);

@@ -1,9 +1,9 @@
 <template>
-    <v-dialog v-model="dialog" max-width="320">
+    <v-dialog v-model="dialog" max-width="400">
         <v-card>
-            <v-card-title class="headline">Remover Questão?</v-card-title>
+            <v-card-title class="headline">Remover questionário?</v-card-title>
             <v-card-text>
-                Tem certeza que deseja remover o questionário {{id}}?<br>
+                Tem certeza que deseja remover o questionário {{title}}?<br>
                 Remover o questionário remove também as questões!
             </v-card-text>
             <v-card-actions>
@@ -29,15 +29,17 @@ import { eventHub } from '../../eventHub';
 
 export default {
     created() {
-        eventHub.$on('questionnaire-delete', (id) => {
+        eventHub.$on('questionnaire-delete', (id, title) => {
             this.dialog = true;
             this.id = id;
+            this.title = title;
         })
     },
     data() {
         return {
             dialog: false,
             id: null,
+            title: null,
         }
     },
     methods: {

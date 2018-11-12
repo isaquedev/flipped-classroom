@@ -31,7 +31,7 @@
                 <v-autocomplete
                         v-model="questionnaire"
                         :items="questionnaires"
-                        label="Questionários"
+                        label="Questionário"
                         item-text="Questionário"
                         no-data-text="Nenhum questionário encontrado"
                     ></v-autocomplete>
@@ -45,7 +45,7 @@
                     <v-text-field
                         slot="activator"
                         v-model="due_date"
-                        label="Data de entrega"
+                        label="Data de liberação"
                         :rules="validation.date"
                         required
                         readonly
@@ -70,7 +70,7 @@
                     <v-text-field
                         slot="activator"
                         v-model="due_date_time"
-                        label="Hora da entrega"
+                        label="Hora da liberação"
                         :rules="validation.date_time"
                         required
                         readonly
