@@ -11,7 +11,7 @@
                 <v-spacer></v-spacer>
 
                 <create-questionnaire/>
-
+                
                 </v-toolbar>
                     <v-data-table
                         :headers="headers"
@@ -33,6 +33,7 @@
                     <td class="text-xs-left">
                     <v-icon
                         small
+                        v-if="isCreator(props.item.id_teacher)"
                         @click="editQuest(props.item)"
                     >
                         edit
@@ -102,6 +103,9 @@ export default {
             this.isLoading = false;
             return this.$store.state.questionnaires.all;
         },
+        user() {
+            return this.$store.state.auth.user;
+        }
     },
     watch: {
         questionnaires: function(to, from) {
@@ -118,6 +122,10 @@ export default {
         showQuest(questionnaire) {
             eventHub.$emit('questionnaire-show', questionnaire);
         },
+        isCreator(id_teacher){
+            let trueId = id_teacher.split(' ')[0];
+            return trueId == this.user.id;
+        }
     },
     mounted() {
         if (this.questionnaires.length > 0){

@@ -18,8 +18,5 @@ export default {
     components: {
         'list-questionnaires': ListQuestionnaires,
     },
-    created() {
-        console.log('created');
-    },
 }
 </script>
