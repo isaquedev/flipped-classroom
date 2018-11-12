@@ -1,15 +1,15 @@
 <?php
 
-namespace UNI\Framework\Questionnaires;
+namespace App;
 
 use UNI\Framework\Modules\Contract;
 
-class Module implements Contract
+class UsersModule implements Contract
 {
     public function getNamespaces() :array
     {
         return [
-            'UNI\\Framework\\Questionnaires\\' => __DIR__ . '/src'
+            'App\\' => __DIR__ . '/src'
         ];
     }
     public function getContainerConfig() :string
