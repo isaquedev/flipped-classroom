@@ -12,8 +12,8 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
             <v-container>
-                <div v-html="lesson.text_content"></div>
-                <v-flex class="text-xs-center mt-3">
+                <div class="mb-3" v-html="lesson.text_content"></div>
+                <v-flex class="text-xs-center">
                     <youtube v-if="videoId" :video-id="videoId"
                     @ended="videoEnd()"></youtube>
                 </v-flex>
