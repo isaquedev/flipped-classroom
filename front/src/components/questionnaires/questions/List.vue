@@ -45,9 +45,9 @@
         <!--Delete Question-->
         <v-dialog v-model="dialogDel" max-width="320">
             <v-card>
-                <v-card-title class="headline">Remover Questão?</v-card-title>
+                <v-card-title class="headline">Remover questão?</v-card-title>
                 <v-card-text>
-                    Tem certeza que deseja remover a questão {{id}}?
+                    Tem certeza que deseja remover a questão {{id + 1}}?
                 </v-card-text>            
                 <v-card-actions>
 
