@@ -4,7 +4,7 @@
             <h2 class="display-1 mb-4">Turmas</h2>
         </v-flex>
         <v-layout row wrap>
-        <v-flex xs3 v-for="schoolclass in schoolclasses" :key="schoolclass.id">
+        <v-flex md3 sm6 xs12 v-for="schoolclass in schoolclasses" :key="schoolclass.id">
             <v-card color="blue-grey darken-2" class="white--text">
                 <v-card-title primary-title>
                     <div class="headline">{{ schoolclass.title }}</div>
@@ -20,7 +20,7 @@
                     <v-btn v-if="type == user" flat dark @click="alunos_turma(schoolclass)">Alunos</v-btn>
             </v-card>
         </v-flex>
-        <v-flex xs3>
+        <v-flex md3 sm6 xs12>
             <schoolclasses-edit/>
             <schoolclasses-delete/>
             <students-manager-list/>
