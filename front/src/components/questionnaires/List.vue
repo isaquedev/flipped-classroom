@@ -29,7 +29,7 @@
                         <td >{{props.item.title}}</td>
                         <td >{{props.item.id_teacher}}</td>
                         <td >{{props.item.is_public}}</td>  
-                        <td class="text-xs-center">{{props.item.random_answers}}</td>
+                        <td class="text-xs-center">{{props.item.random_questions}}</td>
                     <td class="text-xs-left">
                     <v-icon
                         small

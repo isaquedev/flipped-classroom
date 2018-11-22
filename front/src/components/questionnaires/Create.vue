@@ -39,7 +39,7 @@
                                             label="Público"
                                         ></v-switch>
                                         <v-switch
-                                            v-model="data.random_answers"
+                                            v-model="data.random_questions"
                                             label="Aleatorizar Perguntas"
                                         ></v-switch>
                                         </v-card-text>
@@ -74,7 +74,7 @@ export default {
             data: {
                 title: '',
                 is_public: false,
-                random_answers: false,
+                random_questions: false,
             },
             hour: 0,
             min: 0,
@@ -113,7 +113,7 @@ export default {
             this.data = {
                 title: '',
                 is_public: false,
-                random_answers: false,
+                random_questions: false,
             };
         }
     }

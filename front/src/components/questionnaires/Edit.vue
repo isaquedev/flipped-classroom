@@ -38,7 +38,7 @@
                                             label="Público"
                                         ></v-switch>
                                         <v-switch
-                                            v-model="data.random_answers"
+                                            v-model="data.random_questions"
                                             label="Randomizar Perguntas"
                                         ></v-switch>
                                         </v-card-text>
@@ -112,7 +112,7 @@ export default {
         },
         unMask(questionnaire, unMask){
             questionnaire['is_public']        = this.toBoolen(questionnaire['is_public'], unMask);
-            questionnaire['random_answers']   = this.toBoolen(questionnaire['random_answers'], unMask);
+            questionnaire['random_questions']   = this.toBoolen(questionnaire['random_questions'], unMask);
             return questionnaire;
         },
         toBoolen(value, unMask) {
@@ -128,7 +128,7 @@ export default {
             let tempQuestionnaire = {
                 title: questionnaire.title,
                 is_public: questionnaire.is_public,
-                random_answers: questionnaire.random_answers,
+                random_questions: questionnaire.random_questions,
                 id_teacher: questionnaire.id_teacher
             };
             tempQuestionnaire = this.unMask(tempQuestionnaire, true);

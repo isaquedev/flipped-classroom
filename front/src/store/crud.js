@@ -108,7 +108,7 @@ export default function (endpoint) {
                 if (state.all[i]['id'] === data['id']){
                     state.all[i]['title'] = data['title'];
                     state.all[i]['is_public'] = data['is_public'];
-                    state.all[i]['random_answers'] = data['random_answers'];
+                    state.all[i]['random_questions'] = data['random_questions'];
                     break;
                 }
             }

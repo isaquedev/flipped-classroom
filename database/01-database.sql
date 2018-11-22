@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `questionnaires` (
   `title` VARCHAR(50) NOT NULL,
   `id_teacher` INT UNSIGNED NOT NULL,
   `is_public` TINYINT(1) NOT NULL,  
-  `random_answers` TINYINT(1) NOT NULL,
+  `random_questions` TINYINT(1) NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`),

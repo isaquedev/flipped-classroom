@@ -262,7 +262,7 @@ export default {
                     "amber" : "grey";
         },
         setupQuestionnaire() {
-            if (this.questionnaire.random_answers == 1){
+            if (this.questionnaire.random_questions == 1){
                 this.$store.commit('question/randomQuestions');
             } 
             this.questions = this.$store.state.question.all;
