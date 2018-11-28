@@ -148,6 +148,7 @@ export default {
   },
   mounted() {
       this.resetDate();
+      this.$store.commit('question/clean');
   },
 };
 </script>
