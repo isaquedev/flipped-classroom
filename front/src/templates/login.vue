@@ -20,6 +20,7 @@
                                         label="Email"
                                         color="amber"
                                         :rules="validation.login"
+                                        @keyup.native.enter="submit()"
                                         required
                                     ></v-text-field>
                                     <v-text-field
@@ -29,6 +30,7 @@
                                         type="password"
                                         color="amber"
                                         :rules="validation.password"
+                                        @keyup.native.enter="submit()"
                                         required
                                     ></v-text-field>
                                 </v-form>
