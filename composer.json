@@ -21,7 +21,7 @@
         ]
     },
     "scripts": {
-        "server": "php -S localhost:8000 -t public"
+        "server": "php -S localhost:8000 -t public_html"
     },
     "config": {
         "process-timeout": 0
