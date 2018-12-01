@@ -10,7 +10,7 @@
                                 <v-spacer></v-spacer>
                             </v-toolbar>
                             <v-card-text>
-                                <v-card-text class="red--text" v-model="error" v-if="error">
+                                <v-card-text class="rounded red white--text" v-if="error">
                                     Usuário ou senha incorretos
                                 </v-card-text>
                                 <v-form v-model="valid" ref="form">
@@ -78,3 +78,10 @@ export default {
     }
 }
 </script>
+
+
+<style>
+    .rounded{
+        border-radius: 2px;
+    }
+</style>

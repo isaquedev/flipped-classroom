@@ -88,6 +88,7 @@ export default {
     },
     computed: {
         users() {
+            this.isLoading = false;
             return this.$store.state.user.all;
         }
     },
@@ -105,6 +106,9 @@ export default {
         },
     },
     mounted() {
+        if (this.questionnaires.length > 0){
+            this.isLoading = false;
+        }
         setTimeout(() => {
             this.isLoading = false;
         }, 5000);

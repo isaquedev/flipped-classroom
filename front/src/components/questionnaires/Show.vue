@@ -415,6 +415,8 @@ export default {
             this.notConcludedStudents = [];
             if(this.isStudent){
                 eventHub.$emit('questionnaire-done');
+            } else {
+                this.$store.commit('question/clean');
             }
         }
     },

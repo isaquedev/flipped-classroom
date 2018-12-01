@@ -60,13 +60,16 @@
 export default {
     data() {
         return {
-            drawer: true
+            drawer: false
         }
     }, 
-    computed: {              
+    computed: {
         user() {
             return this.$store.state.auth.user;
         },
+    },
+    mounted() {
+        console.log(window.innerWidth);
     },
     methods: {
         logout() {

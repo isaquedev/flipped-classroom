@@ -4,6 +4,7 @@
             <h2 class="display-1 mb-4">Turmas</h2>
         </v-flex>
         <v-layout row wrap>
+
         <v-flex md3 sm6 xs12 v-for="schoolclass in schoolclasses" :key="schoolclass.id">
             <v-card color="blue-grey darken-2" class="white--text">
                 <v-card-title primary-title>

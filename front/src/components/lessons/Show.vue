@@ -65,7 +65,6 @@ export default {
         close(){
             this.dialog = false;
             this.videoId = null;
-            this.$store.commit('question/clean');
         },
         videoEnd() {
             this.blockQuestionnaire = false;
